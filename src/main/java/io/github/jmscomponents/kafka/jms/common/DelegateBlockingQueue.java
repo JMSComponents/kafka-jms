@@ -14,7 +14,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package io.github.jmscomponents.kafka.jms.common;
 
 import java.util.Collection;
@@ -25,7 +24,6 @@ import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
-
 
 public abstract class DelegateBlockingQueue<E> implements BlockingQueue<E> {
    

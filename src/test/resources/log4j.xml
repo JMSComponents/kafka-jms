@@ -10,8 +10,8 @@
         </layout>
     </appender>
 
-    <logger name="com.ig.jms">
-        <level value="DEBUG" />
+    <logger name="io.github.jmscomponents.kafka">
+        <level value="INFO" />
     </logger>
     
     <root>

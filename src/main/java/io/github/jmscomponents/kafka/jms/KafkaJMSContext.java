@@ -45,7 +45,7 @@ import java.io.Serializable;
 import io.github.jmscomponents.kafka.jms.exception.JmsExceptionSupport;
 
 /**
- * ActiveMQ Artemis implementation of a JMSContext.
+ * Kafka implementation of a JMSContext.
  */
 public class KafkaJMSContext implements JMSContext {
 

@@ -14,7 +14,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package io.github.jmscomponents.kafka.jms.consumer;
 
 import javax.jms.JMSException;

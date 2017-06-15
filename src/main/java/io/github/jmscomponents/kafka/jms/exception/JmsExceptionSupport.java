@@ -14,7 +14,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package io.github.jmscomponents.kafka.jms.exception;
 
 
@@ -47,7 +46,6 @@ import java.lang.*;
  * Factory class for creating JMSException instances based on String messages or by
  * wrapping other non-JMS exception.
  *
- * @since 1.0
  */
 public final class JmsExceptionSupport {
 

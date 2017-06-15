@@ -14,7 +14,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package io.github.jmscomponents.kafka.amqp.consumer;
 
 import java.util.Map;
@@ -25,9 +24,6 @@ import io.github.jmscomponents.kafka.amqp.serialization.AmqpMessageDeserializer;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.apache.qpid.proton.message.Message;
 
-/**
- * Created by pearcem on 01/02/2017.
- */
 public class AmqpMessageConsumer extends KafkaConsumer<String, Message> implements Consumer<String, Message>
 {
    public AmqpMessageConsumer(Map<String, Object> configs)

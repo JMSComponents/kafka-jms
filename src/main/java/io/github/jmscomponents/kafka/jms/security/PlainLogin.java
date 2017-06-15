@@ -14,7 +14,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package io.github.jmscomponents.kafka.jms.security;
 
 import javax.security.auth.login.AppConfigurationEntry;
@@ -23,7 +22,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.kafka.common.security.plain.PlainLoginModule;
-
 
 public class PlainLogin
 {

@@ -21,7 +21,6 @@ import java.util.Set;
 
 import io.github.jmscomponents.kafka.jms.exception.PropertyConversionException;
 
-
 /**
  * Property Value Conversion.
  * <p>

@@ -14,7 +14,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package io.github.jmscomponents.kafka.amqp.producer;
 
 import javax.jms.Message;
@@ -26,9 +25,6 @@ import org.apache.kafka.clients.producer.Producer;
 import io.github.jmscomponents.kafka.amqp.serialization.AmqpJmsMessageSerializer;
 import org.apache.kafka.common.serialization.StringSerializer;
 
-/**
- * Created by pearcem on 01/02/2017.
- */
 public class AmqpJmsMessageProducer extends KafkaProducer<String, Message> implements Producer<String, Message>
 {
    public AmqpJmsMessageProducer(Map<String, Object> configs)

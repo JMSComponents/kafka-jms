@@ -14,15 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package io.github.jmscomponents.kafka.jms.common;
 
 import javax.jms.Session;
 import java.util.Properties;
 
-/**
- * Created by pearcem on 23/03/2017.
- */
 public interface ConnectionAwareSession extends Session
 {
    boolean isClosed();
