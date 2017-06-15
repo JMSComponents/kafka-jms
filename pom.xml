@@ -87,5 +87,32 @@
             </plugin>
         </plugins>
     </build>
+    
+    <profiles>
+        <profile>
+            <id>bintray</id>
+            <repositories>
+                <repository>
+                    <snapshots>
+                        <enabled>true</enabled>
+                    </snapshots>
+                    <id>bintray-jmscomponents-maven</id>
+                    <name>bintray</name>
+                    <url>http://dl.bintray.com/jmscomponents/maven</url>
+                </repository>
+            </repositories>
+            <pluginRepositories>
+                <pluginRepository>
+                    <snapshots>
+                        <enabled>true</enabled>
+                    </snapshots>
+                    <id>bintray-jmscomponents-maven</id>
+                    <name>bintray-plugins</name>
+                    <url>http://dl.bintray.com/jmscomponents/maven</url>
+                </pluginRepository>
+            </pluginRepositories>
+        </profile>
+    </profiles>
+
 
 </project>
