@@ -48,7 +48,7 @@ public class KafkaMessageProducer implements MessageProducer {
    private final Producer<String, Message> producer;
 
    KafkaMessageProducer(KafkaSession session, javax.jms.Destination destination) throws JMSException {
-      this.destination = Preconditions.checkDestination(destination);
+      this.destination = Preconditions.ensureKafkaDestination(destination);
 
       this.producer = session.getProducerFactory().createProducer();
    }

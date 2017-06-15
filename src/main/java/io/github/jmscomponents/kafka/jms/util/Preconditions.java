@@ -31,10 +31,10 @@ public class Preconditions
 {
    private Preconditions() {
    }
-
-   public static Destination checkDestination(javax.jms.Destination destination) throws JMSException {
+   
+   public static Destination ensureKafkaDestination(javax.jms.Destination destination) throws JMSException {
       if(null == destination) {
-         throw new InvalidDestinationException("destination cannot be null");
+         return null;
       } else if(destination instanceof Destination) {
          return (Destination)destination;
       } else if(destination instanceof javax.jms.Queue) {
@@ -42,6 +42,14 @@ public class Preconditions
       } else {
          return new Topic(((javax.jms.Topic)destination).getTopicName());
       }
+   }
+
+   public static Destination checkDestination(javax.jms.Destination destination) throws JMSException {
+      Destination kafkaDestination = ensureKafkaDestination(destination);
+      if(null == kafkaDestination) {
+         throw new InvalidDestinationException("destination cannot be null");
+      }
+      return kafkaDestination;
    }
 
    public static Queue checkQueueDestination(javax.jms.Destination destination) throws JMSException {
