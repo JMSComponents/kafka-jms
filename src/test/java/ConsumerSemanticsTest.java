@@ -51,6 +51,7 @@ public class ConsumerSemanticsTest
       embeddedKafkaCluster.start();
       embeddedKafkaCluster.createTopic(TOPIC_NAME);
       embeddedKafkaCluster.createTopic(QUEUE_NAME);
+      Thread.sleep(10000);
 
    }
    
@@ -82,7 +83,7 @@ public class ConsumerSemanticsTest
          }
       }
 
-      assertEquals(text, result.getText());
+      assertEquals(text, result == null ? null : result.getText());
    }
 
    @Test
