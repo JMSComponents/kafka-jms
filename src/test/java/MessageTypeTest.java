@@ -36,29 +36,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-public class MessageTypeTest
+public class MessageTypeTest extends BaseKafkaJMSTest
 {
-
-   private static String TOPIC_NAME = "topic";
-   private static String QUEUE_NAME = "queue";
-
-   private EmbeddedKafkaCluster embeddedKafkaCluster;
-   
-   @Before
-   public void before() throws IOException, InterruptedException
-   {
-      embeddedKafkaCluster = new EmbeddedKafkaCluster(1);
-      embeddedKafkaCluster.start();
-      embeddedKafkaCluster.createTopic(TOPIC_NAME);
-      embeddedKafkaCluster.createTopic(QUEUE_NAME);
-      Thread.sleep(10000);
-
-   }
-   
-   @After
-   public void after(){
-      embeddedKafkaCluster.stop();
-   }
    
    @Test
    public void testTextMessage() throws IOException, InterruptedException, JMSException {
