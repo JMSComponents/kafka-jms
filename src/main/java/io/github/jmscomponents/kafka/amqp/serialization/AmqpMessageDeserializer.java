@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package io.github.jmscomponents.kafka.amqp;
+package io.github.jmscomponents.kafka.amqp.serialization;
 
 import java.util.Map;
 

@@ -6,7 +6,7 @@ import java.util.Properties;
 
 import org.apache.kafka.clients.consumer.Consumer;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
-import io.github.jmscomponents.kafka.amqp.AmqpJmsMessageDeserializer;
+import io.github.jmscomponents.kafka.amqp.serialization.AmqpJmsMessageDeserializer;
 import org.apache.kafka.common.serialization.StringDeserializer;
 
 /**

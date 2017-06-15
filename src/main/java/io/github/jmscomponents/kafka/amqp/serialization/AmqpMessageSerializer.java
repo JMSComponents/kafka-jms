@@ -1,4 +1,4 @@
-package io.github.jmscomponents.kafka.amqp;
+package io.github.jmscomponents.kafka.amqp.serialization;
 
 import java.nio.BufferOverflowException;
 import java.util.Arrays;

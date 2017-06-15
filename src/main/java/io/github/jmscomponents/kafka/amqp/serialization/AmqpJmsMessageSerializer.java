@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package io.github.jmscomponents.kafka.amqp;
+package io.github.jmscomponents.kafka.amqp.serialization;
 
 import javax.jms.BytesMessage;
 import javax.jms.JMSException;
@@ -39,14 +39,7 @@ public class AmqpJmsMessageSerializer implements Serializer<Message>
 
       public byte[] serialize(String s, Message message) {
          try {
-             Message jmsMessage = JmsMessageTransformation.transformMessage(message);
-            if (jmsMessage instanceof BytesMessage){
-                ((BytesMessage) message).reset();
-            }
-             if (jmsMessage instanceof StreamMessage){
-                 ((StreamMessage) message).reset();
-             }
-            org.apache.qpid.proton.message.Message amqpMessage = AmqpJmsConverter.toAmqpMessage(jmsMessage);
+            org.apache.qpid.proton.message.Message amqpMessage = AmqpJmsConverter.toAmqpMessage(message);
             return messageSerializer.serialize(s, amqpMessage);
          } catch (JMSException e)
          {

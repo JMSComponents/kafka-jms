@@ -44,7 +44,7 @@ import io.github.jmscomponents.kafka.jms.producer.ProducerFactory;
 import io.github.jmscomponents.kafka.jms.producer.ProducerFactoryImpl;
 import io.github.jmscomponents.kafka.jms.util.Preconditions;
 import io.github.jmscomponents.kafka.jms.util.Unsupported;
-import org.apache.qpid.jms.provider.amqp.message.AmqpJmsMessageFactory;
+import org.apache.qpid.jms.provider.amqp.message.KafkaAmqpJmsMessageFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -54,7 +54,7 @@ public class KafkaSession implements ConnectionAwareSession
    private final boolean transacted;
    private final int acknowledgeMode;
    private final KafkaConnection connection;
-   private MessageFactory jmsMessageFactory = new AmqpJmsMessageFactory();
+   private MessageFactory jmsMessageFactory = new KafkaAmqpJmsMessageFactory();
    private ConsumerFactory consumerFactory;
    private ProducerFactory producerFactory;
    private List<KafkaMessageConsumer> consumers = new ArrayList<>();

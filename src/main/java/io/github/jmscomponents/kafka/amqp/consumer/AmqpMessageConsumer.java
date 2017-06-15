@@ -21,7 +21,7 @@ import java.util.Map;
 
 import org.apache.kafka.clients.consumer.Consumer;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
-import io.github.jmscomponents.kafka.amqp.AmqpMessageDeserializer;
+import io.github.jmscomponents.kafka.amqp.serialization.AmqpMessageDeserializer;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.apache.qpid.proton.message.Message;
 

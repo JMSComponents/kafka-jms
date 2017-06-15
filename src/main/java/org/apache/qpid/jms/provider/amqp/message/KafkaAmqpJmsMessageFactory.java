@@ -42,7 +42,7 @@ import org.apache.qpid.jms.provider.amqp.AmqpProvider;
  * Message instances, the messages returned here should be created in a proper
  * initially empty state for the client to populate.
  */
-public class AmqpJmsMessageFactory implements MessageFactory {
+public class KafkaAmqpJmsMessageFactory implements MessageFactory {
 
     @Override
     public JmsMessage createMessage() throws JMSException {

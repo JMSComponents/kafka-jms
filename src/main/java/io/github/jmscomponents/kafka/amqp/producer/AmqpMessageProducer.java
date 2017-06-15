@@ -4,7 +4,7 @@ import java.util.Map;
 
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.Producer;
-import io.github.jmscomponents.kafka.amqp.AmqpMessageSerializer;
+import io.github.jmscomponents.kafka.amqp.serialization.AmqpMessageSerializer;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.apache.qpid.proton.message.Message;
 

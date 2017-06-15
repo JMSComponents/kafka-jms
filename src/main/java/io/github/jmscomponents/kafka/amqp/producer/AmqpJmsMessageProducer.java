@@ -23,7 +23,7 @@ import java.util.Properties;
 
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.Producer;
-import io.github.jmscomponents.kafka.amqp.AmqpJmsMessageSerializer;
+import io.github.jmscomponents.kafka.amqp.serialization.AmqpJmsMessageSerializer;
 import org.apache.kafka.common.serialization.StringSerializer;
 
 /**

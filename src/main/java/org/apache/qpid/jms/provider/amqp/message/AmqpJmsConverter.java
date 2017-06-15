@@ -35,6 +35,7 @@ import java.nio.charset.StandardCharsets;
 
 import io.netty.buffer.ByteBuf;
 import org.apache.qpid.jms.JmsTopic;
+import org.apache.qpid.jms.message.JmsBytesMessage;
 import org.apache.qpid.jms.message.JmsMessage;
 import org.apache.qpid.jms.message.facade.JmsMessageFacade;
 import org.apache.qpid.jms.meta.JmsConnectionId;
@@ -84,6 +85,9 @@ public final class AmqpJmsConverter
             jmsMessage = (JmsMessage) message;
         } else {
             jmsMessage = JmsMessageTransformation.transformMessage(message);
+        }
+        if (jmsMessage instanceof JmsBytesMessage){
+            ((JmsBytesMessage) jmsMessage).reset();
         }
         
         JmsMessageFacade jmsMessageFacade = jmsMessage.getFacade();
