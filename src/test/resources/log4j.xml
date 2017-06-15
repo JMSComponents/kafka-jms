@@ -13,7 +13,11 @@
     <logger name="io.github.jmscomponents.kafka">
         <level value="INFO" />
     </logger>
-    
+
+    <logger name="org.junit">
+        <level value="INFO" />
+    </logger>
+
     <root>
         <level value="ERROR" />
         <appender-ref ref="console" />

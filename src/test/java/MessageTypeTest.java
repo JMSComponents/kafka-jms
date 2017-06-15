@@ -51,6 +51,7 @@ public class MessageTypeTest
       embeddedKafkaCluster.start();
       embeddedKafkaCluster.createTopic(TOPIC_NAME);
       embeddedKafkaCluster.createTopic(QUEUE_NAME);
+      Thread.sleep(10000);
 
    }
    
@@ -64,7 +65,7 @@ public class MessageTypeTest
 
       ConnectionFactory connectionFactory = new KafkaConnectionFactory(embeddedKafkaCluster.bootstrapServers());
       
-      String text = "testString";
+      String text = "testStringtestString";
       TextMessage result;
       try(Connection connection = connectionFactory.createConnection()){
          connection.start();
@@ -82,7 +83,7 @@ public class MessageTypeTest
          }
       }
 
-      assertEquals(text, result.getText());
+      assertEquals(text, result == null ? null : result.getText());
    }
 
    @Test
@@ -141,7 +142,7 @@ public class MessageTypeTest
          }
       }
 
-      assertEquals(value, result.getString(key));
+      assertEquals(value, result == null ? null : result.getString(key));
    }
 
    @Test
@@ -170,7 +171,7 @@ public class MessageTypeTest
          }
       }
 
-      assertEquals(value, result.getObject());
+      assertEquals(value, result == null ? null : result.getObject());
    }
 
 
@@ -200,6 +201,6 @@ public class MessageTypeTest
          }
       }
 
-      assertEquals(value, result.readString());
+      assertEquals(value, result == null ? null : result.readString());
    }
 }

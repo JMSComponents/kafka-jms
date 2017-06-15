@@ -47,6 +47,7 @@ public class JMSContextTest {
         embeddedKafkaCluster.start();
         embeddedKafkaCluster.createTopic(TOPIC_NAME);
         embeddedKafkaCluster.createTopic(QUEUE_NAME);
+        Thread.sleep(10000);
 
     }
 
