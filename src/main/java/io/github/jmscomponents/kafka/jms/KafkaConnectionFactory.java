@@ -35,6 +35,8 @@ public class KafkaConnectionFactory implements ConnectionFactory {
    private static final Logger log = LoggerFactory.getLogger(KafkaConnectionFactory.class);
    private final Properties properties = new Properties();
    private final String bootstrapServers;
+   private String username;
+   private String password;
    
    public KafkaConnectionFactory(String bootstrapServers) {
       this.bootstrapServers = bootstrapServers;
@@ -42,7 +44,7 @@ public class KafkaConnectionFactory implements ConnectionFactory {
 
    
    public Connection createConnection() throws JMSException {
-      return createConnection(null, null);
+      return createConnection(username, password);
    }
 
    public Connection createConnection(String username, String password) throws JMSException {
@@ -51,12 +53,12 @@ public class KafkaConnectionFactory implements ConnectionFactory {
 
    @Override
    public JMSContext createContext() {
-      return createContext(null, null);
+      return createContext(username, password);
    }
 
    @Override
    public JMSContext createContext(final int sessionMode) {
-      return createContext(null, null, sessionMode);
+      return createContext(username, password, sessionMode);
    }
 
    @Override
@@ -84,7 +86,23 @@ public class KafkaConnectionFactory implements ConnectionFactory {
    public void setProperty(String key, String value){
       this.properties.setProperty(key, value);
    }
-   
+
+   public String getUsername() {
+      return username;
+   }
+
+   public void setUsername(String username) {
+      this.username = username;
+   }
+
+   public String getPassword() {
+      return password;
+   }
+
+   public void setPassword(String password) {
+      this.password = password;
+   }
+
    private KafkaConnection createConnectionInternal(String username, String password) throws JMSException {
       if (username != null && password != null) {
          javax.security.auth.login.Configuration.setConfiguration(PlainLogin.createJaasConfig(username, password));
