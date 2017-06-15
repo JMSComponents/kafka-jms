@@ -39,7 +39,7 @@ import org.apache.kafka.clients.CommonClientConfigs;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class KafkaConnection implements Connection {
+public class KafkaConnection extends KafkaConnectionForContextImpl implements Connection {
    private static final Logger log = LoggerFactory.getLogger(KafkaConnection.class);
    private final Properties config;
    private ExceptionListener exceptionListener;

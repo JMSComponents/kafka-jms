@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.github.jmscomponents.kafka;
+package io.github.jmscomponents.kafka.jms;
 
 import javax.jms.BytesMessage;
 import javax.jms.CompletionListener;
@@ -29,17 +29,14 @@ import javax.jms.MessageProducer;
 import javax.jms.ObjectMessage;
 import javax.jms.TextMessage;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import org.apache.activemq.artemis.api.core.ActiveMQPropertyConversionException;
-import org.apache.activemq.artemis.api.core.SimpleString;
-import org.apache.activemq.artemis.utils.collections.TypedProperties;
+import io.github.jmscomponents.kafka.jms.exception.PropertyConversionException;
+import io.github.jmscomponents.kafka.jms.message.TypedProperties;
+import io.github.jmscomponents.kafka.jms.exception.JmsExceptionSupport;
 
 /**
  * NOTE: this class forwards {@link #setDisableMessageID(boolean)} and
@@ -52,10 +49,6 @@ public final class KafkaJMSProducer implements JMSProducer {
    private final KafkaJMSContext context;
    private final MessageProducer producer;
    private final TypedProperties properties = new TypedProperties();
-
-   //we convert Strings to SimpleStrings so if getProperty is called the wrong object is returned, this list let's us return the
-   //correct type
-   private final List<String> stringPropertyNames = new ArrayList<>();
 
    private volatile CompletionListener completionListener;
 
@@ -98,7 +91,7 @@ public final class KafkaJMSProducer implements JMSProducer {
             producer.send(destination, message);
          }
       } catch (JMSException e) {
-         throw JmsExceptionUtils.convertToRuntimeException(e);
+         throw JmsExceptionSupport.convertToRuntimeException(e);
       }
       return this;
    }
@@ -110,8 +103,8 @@ public final class KafkaJMSProducer implements JMSProducer {
     * @throws JMSException
     */
    private void setProperties(Message message) throws JMSException {
-      for (String name : properties.getPropertyNames()) {
-         message.setObjectProperty(name.toString(), properties.getProperty(name));
+      for (String name : properties.keySet()) {
+         message.setObjectProperty(name, properties.get(name));
       }
    }
 
@@ -189,7 +182,7 @@ public final class KafkaJMSProducer implements JMSProducer {
       try {
          producer.setDisableMessageID(value);
       } catch (JMSException e) {
-         throw JmsExceptionUtils.convertToRuntimeException(e);
+         throw JmsExceptionSupport.convertToRuntimeException(e);
       }
       return this;
    }
@@ -199,7 +192,7 @@ public final class KafkaJMSProducer implements JMSProducer {
       try {
          return producer.getDisableMessageID();
       } catch (JMSException e) {
-         throw JmsExceptionUtils.convertToRuntimeException(e);
+         throw JmsExceptionSupport.convertToRuntimeException(e);
       }
    }
 
@@ -208,7 +201,7 @@ public final class KafkaJMSProducer implements JMSProducer {
       try {
          producer.setDisableMessageTimestamp(value);
       } catch (JMSException e) {
-         throw JmsExceptionUtils.convertToRuntimeException(e);
+         throw JmsExceptionSupport.convertToRuntimeException(e);
       }
       return this;
    }
@@ -218,7 +211,7 @@ public final class KafkaJMSProducer implements JMSProducer {
       try {
          return producer.getDisableMessageTimestamp();
       } catch (JMSException e) {
-         throw JmsExceptionUtils.convertToRuntimeException(e);
+         throw JmsExceptionSupport.convertToRuntimeException(e);
       }
    }
 
@@ -329,58 +322,56 @@ public final class KafkaJMSProducer implements JMSProducer {
    @Override
    public JMSProducer setProperty(String name, boolean value) {
       checkName(name);
-      properties.putBooleanProperty(new SimpleString(name), value);
+      properties.putBooleanProperty(name, value);
       return this;
    }
 
    @Override
    public JMSProducer setProperty(String name, byte value) {
       checkName(name);
-      properties.putByteProperty(new SimpleString(name), value);
+      properties.putByteProperty(name, value);
       return this;
    }
 
    @Override
    public JMSProducer setProperty(String name, short value) {
       checkName(name);
-      properties.putShortProperty(new SimpleString(name), value);
+      properties.putShortProperty(name, value);
       return this;
    }
 
    @Override
    public JMSProducer setProperty(String name, int value) {
       checkName(name);
-      properties.putIntProperty(new SimpleString(name), value);
+      properties.putIntProperty(name, value);
       return this;
    }
 
    @Override
    public JMSProducer setProperty(String name, long value) {
       checkName(name);
-      properties.putLongProperty(new SimpleString(name), value);
+      properties.putLongProperty(name, value);
       return this;
    }
 
    @Override
    public JMSProducer setProperty(String name, float value) {
       checkName(name);
-      properties.putFloatProperty(new SimpleString(name), value);
+      properties.putFloatProperty(name, value);
       return this;
    }
 
    @Override
    public JMSProducer setProperty(String name, double value) {
       checkName(name);
-      properties.putDoubleProperty(new SimpleString(name), value);
+      properties.putDoubleProperty(name, value);
       return this;
    }
 
    @Override
    public JMSProducer setProperty(String name, String value) {
       checkName(name);
-      SimpleString key = new SimpleString(name);
-      properties.putSimpleStringProperty(key, new SimpleString(value));
-      stringPropertyNames.add(key);
+      properties.putStringProperty(name, value);
       return this;
    }
 
@@ -388,9 +379,7 @@ public final class KafkaJMSProducer implements JMSProducer {
    public JMSProducer setProperty(String name, Object value) {
       checkName(name);
       try {
-         TypedProperties.setObjectProperty(new SimpleString(name), value, properties);
-      } catch (ActiveMQPropertyConversionException amqe) {
-         throw new MessageFormatRuntimeException(amqe.getMessage());
+         TypedProperties.setObjectProperty(name, value, properties);
       } catch (RuntimeException e) {
          throw new JMSRuntimeException(e.getMessage());
       }
@@ -400,7 +389,6 @@ public final class KafkaJMSProducer implements JMSProducer {
    @Override
    public JMSProducer clearProperties() {
       try {
-         stringPropertyNames.clear();
          properties.clear();
       } catch (RuntimeException e) {
          throw new JMSRuntimeException(e.getMessage());
@@ -410,14 +398,14 @@ public final class KafkaJMSProducer implements JMSProducer {
 
    @Override
    public boolean propertyExists(String name) {
-      return properties.containsProperty(new SimpleString(name));
+      return properties.containsKey(name);
    }
 
    @Override
    public boolean getBooleanProperty(String name) {
       try {
-         return properties.getBooleanProperty(new SimpleString(name));
-      } catch (ActiveMQPropertyConversionException ce) {
+         return properties.getBooleanProperty(name);
+      } catch (PropertyConversionException ce) {
          throw new MessageFormatRuntimeException(ce.getMessage());
       } catch (RuntimeException e) {
          throw new JMSRuntimeException(e.getMessage());
@@ -427,8 +415,8 @@ public final class KafkaJMSProducer implements JMSProducer {
    @Override
    public byte getByteProperty(String name) {
       try {
-         return properties.getByteProperty(new SimpleString(name));
-      } catch (ActiveMQPropertyConversionException ce) {
+         return properties.getByteProperty(name);
+      } catch (PropertyConversionException ce) {
          throw new MessageFormatRuntimeException(ce.getMessage());
       }
    }
@@ -436,8 +424,8 @@ public final class KafkaJMSProducer implements JMSProducer {
    @Override
    public short getShortProperty(String name) {
       try {
-         return properties.getShortProperty(new SimpleString(name));
-      } catch (ActiveMQPropertyConversionException ce) {
+         return properties.getShortProperty(name);
+      } catch (PropertyConversionException ce) {
          throw new MessageFormatRuntimeException(ce.getMessage());
       }
    }
@@ -445,8 +433,8 @@ public final class KafkaJMSProducer implements JMSProducer {
    @Override
    public int getIntProperty(String name) {
       try {
-         return properties.getIntProperty(new SimpleString(name));
-      } catch (ActiveMQPropertyConversionException ce) {
+         return properties.getIntProperty(name);
+      } catch (PropertyConversionException ce) {
          throw new MessageFormatRuntimeException(ce.getMessage());
       }
    }
@@ -454,8 +442,8 @@ public final class KafkaJMSProducer implements JMSProducer {
    @Override
    public long getLongProperty(String name) {
       try {
-         return properties.getLongProperty(new SimpleString(name));
-      } catch (ActiveMQPropertyConversionException ce) {
+         return properties.getLongProperty(name);
+      } catch (PropertyConversionException ce) {
          throw new MessageFormatRuntimeException(ce.getMessage());
       }
    }
@@ -463,8 +451,8 @@ public final class KafkaJMSProducer implements JMSProducer {
    @Override
    public float getFloatProperty(String name) {
       try {
-         return properties.getFloatProperty(new SimpleString(name));
-      } catch (ActiveMQPropertyConversionException ce) {
+         return properties.getFloatProperty(name);
+      } catch (PropertyConversionException ce) {
          throw new MessageFormatRuntimeException(ce.getMessage());
       }
    }
@@ -472,8 +460,8 @@ public final class KafkaJMSProducer implements JMSProducer {
    @Override
    public double getDoubleProperty(String name) {
       try {
-         return properties.getDoubleProperty(new SimpleString(name));
-      } catch (ActiveMQPropertyConversionException ce) {
+         return properties.getDoubleProperty(name);
+      } catch (PropertyConversionException ce) {
          throw new MessageFormatRuntimeException(ce.getMessage());
       }
    }
@@ -481,45 +469,25 @@ public final class KafkaJMSProducer implements JMSProducer {
    @Override
    public String getStringProperty(String name) {
       try {
-         SimpleString prop = properties.getSimpleStringProperty(new SimpleString(name));
-         if (prop == null)
-            return null;
-         return prop.toString();
-      } catch (ActiveMQPropertyConversionException ce) {
+         return properties.getStringProperty(name);
+      } catch (PropertyConversionException ce) {
          throw new MessageFormatRuntimeException(ce.getMessage());
-      } catch (RuntimeException e) {
-         throw new JMSRuntimeException(e.getMessage());
       }
    }
 
    @Override
    public Object getObjectProperty(String name) {
       try {
-         SimpleString key = new SimpleString(name);
-         Object property = properties.getProperty(key);
-         if (stringPropertyNames.contains(key)) {
-            property = property.toString();
-         }
-         return property;
-      } catch (ActiveMQPropertyConversionException ce) {
+         return properties.getProperty(name);
+      } catch (PropertyConversionException ce) {
          throw new MessageFormatRuntimeException(ce.getMessage());
-      } catch (RuntimeException e) {
-         throw new JMSRuntimeException(e.getMessage());
       }
    }
 
    @Override
    public Set<String> getPropertyNames() {
       try {
-         Set<SimpleString> simplePropNames = properties.getPropertyNames();
-         Set<String> propNames = new HashSet<>(simplePropNames.size());
-
-         for (SimpleString str : simplePropNames) {
-            propNames.add(str.toString());
-         }
-         return propNames;
-      } catch (ActiveMQPropertyConversionException ce) {
-         throw new MessageFormatRuntimeException(ce.getMessage());
+         return properties.keySet();
       } catch (RuntimeException e) {
          throw new JMSRuntimeException(e.getMessage());
       }
@@ -574,10 +542,10 @@ public final class KafkaJMSProducer implements JMSProducer {
 
    private void checkName(String name) {
       if (name == null) {
-         throw ActiveMQJMSClientBundle.BUNDLE.nameCannotBeNull();
+         throw new IllegalArgumentException("name cannot be null");
       }
       if (name.equals("")) {
-         throw ActiveMQJMSClientBundle.BUNDLE.nameCannotBeEmpty();
+         throw new IllegalArgumentException("name cannot be empty");
       }
    }
 

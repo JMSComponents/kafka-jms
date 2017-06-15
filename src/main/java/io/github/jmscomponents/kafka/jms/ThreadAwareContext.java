@@ -14,14 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.github.jmscomponents.kafka;
+package io.github.jmscomponents.kafka.jms;
 
 import javax.jms.IllegalStateException;
+import javax.jms.IllegalStateRuntimeException;
 import java.util.Collections;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
-
-import org.apache.activemq.artemis.utils.collections.ConcurrentHashSet;
 
 /**
  * Restricts what can be called on context passed in wrapped CompletionListener.
@@ -88,7 +87,7 @@ public class ThreadAwareContext {
     */
    public void assertNotCompletionListenerThreadRuntime() {
       if (completionListenerThread == Thread.currentThread()) {
-         throw ActiveMQJMSClientBundle.BUNDLE.callingMethodFromCompletionListenerRuntime();
+         throw new IllegalStateRuntimeException("It is illegal to call this method from within a Completion Listener");
       }
    }
 
@@ -105,7 +104,7 @@ public class ThreadAwareContext {
     */
    public void assertNotCompletionListenerThread() throws IllegalStateException {
       if (completionListenerThread == Thread.currentThread()) {
-         throw ActiveMQJMSClientBundle.BUNDLE.callingMethodFromCompletionListener();
+         throw new IllegalStateException("It is illegal to call this method from within a Completion Listener");
       }
    }
 
@@ -121,7 +120,7 @@ public class ThreadAwareContext {
     */
    public void assertNotMessageListenerThreadRuntime() {
       if (messageListenerThreads.contains(Thread.currentThread().getId())) {
-         throw ActiveMQJMSClientBundle.BUNDLE.callingMethodFromListenerRuntime();
+         throw new IllegalStateRuntimeException("It is illegal to call this method from within a Message Listener");
       }
    }
 
@@ -138,7 +137,7 @@ public class ThreadAwareContext {
     */
    public void assertNotMessageListenerThread() throws IllegalStateException {
       if (messageListenerThreads.contains(Thread.currentThread().getId())) {
-         throw ActiveMQJMSClientBundle.BUNDLE.callingMethodFromListener();
+         throw new IllegalStateException("It is illegal to call this method from within a Message Listener");
       }
    }
 

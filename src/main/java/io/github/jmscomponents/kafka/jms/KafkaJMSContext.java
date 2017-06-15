@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.github.jmscomponents.kafka;
+package io.github.jmscomponents.kafka.jms;
 
 import javax.jms.BytesMessage;
 import javax.jms.ConnectionMetaData;
@@ -42,7 +42,7 @@ import javax.jms.XASession;
 import javax.transaction.xa.XAResource;
 import java.io.Serializable;
 
-import io.github.jmscomponents.kafka.jms.KafkaConnection;
+import io.github.jmscomponents.kafka.jms.exception.JmsExceptionSupport;
 
 /**
  * ActiveMQ Artemis implementation of a JMSContext.
@@ -59,14 +59,14 @@ public class KafkaJMSContext implements JMSContext {
     */
    private volatile Message lastMessagesWaitingAck;
 
-   private final KafkaConnection connection;
+   private final KafkaConnectionForContext connection;
    private Session session;
    private boolean autoStart = KafkaJMSContext.DEFAULT_AUTO_START;
    private MessageProducer innerProducer;
    private boolean xa;
    private boolean closed;
 
-   KafkaJMSContext(final KafkaConnection connection,
+   KafkaJMSContext(final KafkaConnectionForContext connection,
                    final int ackMode,
                    final boolean xa,
                    ThreadAwareContext threadAwareContext) {
@@ -76,13 +76,13 @@ public class KafkaJMSContext implements JMSContext {
       this.threadAwareContext = threadAwareContext;
    }
 
-   public KafkaJMSContext(KafkaConnection connection,
+   public KafkaJMSContext(KafkaConnectionForContext connection,
                           int ackMode,
                           ThreadAwareContext threadAwareContext) {
       this(connection, ackMode, false, threadAwareContext);
    }
 
-   public KafkaJMSContext(KafkaConnection connection, ThreadAwareContext threadAwareContext) {
+   public KafkaJMSContext(KafkaConnectionForContext connection, ThreadAwareContext threadAwareContext) {
       this(connection, SESSION_TRANSACTED, true, threadAwareContext);
    }
 
@@ -114,7 +114,7 @@ public class KafkaJMSContext implements JMSContext {
       try {
          return new KafkaJMSProducer(this, getInnerProducer());
       } catch (JMSException e) {
-         throw JmsExceptionUtils.convertToRuntimeException(e);
+         throw JmsExceptionSupport.convertToRuntimeException(e);
       }
    }
 
@@ -142,7 +142,7 @@ public class KafkaJMSContext implements JMSContext {
                      session = connection.createSession(sessionMode);
                   }
                } catch (JMSException e) {
-                  throw JmsExceptionUtils.convertToRuntimeException(e);
+                  throw JmsExceptionSupport.convertToRuntimeException(e);
                }
             }
          }
@@ -154,7 +154,7 @@ public class KafkaJMSContext implements JMSContext {
       try {
          return connection.getClientID();
       } catch (JMSException e) {
-         throw JmsExceptionUtils.convertToRuntimeException(e);
+         throw JmsExceptionSupport.convertToRuntimeException(e);
       }
    }
 
@@ -163,7 +163,7 @@ public class KafkaJMSContext implements JMSContext {
       try {
          connection.setClientID(clientID);
       } catch (JMSException e) {
-         throw JmsExceptionUtils.convertToRuntimeException(e);
+         throw JmsExceptionSupport.convertToRuntimeException(e);
       }
    }
 
@@ -172,7 +172,7 @@ public class KafkaJMSContext implements JMSContext {
       try {
          return connection.getMetaData();
       } catch (JMSException e) {
-         throw JmsExceptionUtils.convertToRuntimeException(e);
+         throw JmsExceptionSupport.convertToRuntimeException(e);
       }
    }
 
@@ -181,7 +181,7 @@ public class KafkaJMSContext implements JMSContext {
       try {
          return connection.getExceptionListener();
       } catch (JMSException e) {
-         throw JmsExceptionUtils.convertToRuntimeException(e);
+         throw JmsExceptionSupport.convertToRuntimeException(e);
       }
    }
 
@@ -190,7 +190,7 @@ public class KafkaJMSContext implements JMSContext {
       try {
          connection.setExceptionListener(listener);
       } catch (JMSException e) {
-         throw JmsExceptionUtils.convertToRuntimeException(e);
+         throw JmsExceptionSupport.convertToRuntimeException(e);
       }
    }
 
@@ -199,7 +199,7 @@ public class KafkaJMSContext implements JMSContext {
       try {
          connection.start();
       } catch (JMSException e) {
-         throw JmsExceptionUtils.convertToRuntimeException(e);
+         throw JmsExceptionSupport.convertToRuntimeException(e);
       }
    }
 
@@ -209,7 +209,7 @@ public class KafkaJMSContext implements JMSContext {
       try {
          connection.stop();
       } catch (JMSException e) {
-         throw JmsExceptionUtils.convertToRuntimeException(e);
+         throw JmsExceptionSupport.convertToRuntimeException(e);
       }
    }
 
@@ -231,11 +231,11 @@ public class KafkaJMSContext implements JMSContext {
          synchronized (this) {
             if (session != null)
                session.close();
-            connection.close();
+            connection.closeFromContext();
             closed = true;
          }
       } catch (JMSException e) {
-         throw JmsExceptionUtils.convertToRuntimeException(e);
+         throw JmsExceptionSupport.convertToRuntimeException(e);
       }
    }
 
@@ -245,7 +245,7 @@ public class KafkaJMSContext implements JMSContext {
       try {
          return session.createBytesMessage();
       } catch (JMSException e) {
-         throw JmsExceptionUtils.convertToRuntimeException(e);
+         throw JmsExceptionSupport.convertToRuntimeException(e);
       }
    }
 
@@ -255,7 +255,7 @@ public class KafkaJMSContext implements JMSContext {
       try {
          return session.createMapMessage();
       } catch (JMSException e) {
-         throw JmsExceptionUtils.convertToRuntimeException(e);
+         throw JmsExceptionSupport.convertToRuntimeException(e);
       }
    }
 
@@ -265,7 +265,7 @@ public class KafkaJMSContext implements JMSContext {
       try {
          return session.createMessage();
       } catch (JMSException e) {
-         throw JmsExceptionUtils.convertToRuntimeException(e);
+         throw JmsExceptionSupport.convertToRuntimeException(e);
       }
    }
 
@@ -275,7 +275,7 @@ public class KafkaJMSContext implements JMSContext {
       try {
          return session.createObjectMessage();
       } catch (JMSException e) {
-         throw JmsExceptionUtils.convertToRuntimeException(e);
+         throw JmsExceptionSupport.convertToRuntimeException(e);
       }
    }
 
@@ -285,7 +285,7 @@ public class KafkaJMSContext implements JMSContext {
       try {
          return session.createObjectMessage(object);
       } catch (JMSException e) {
-         throw JmsExceptionUtils.convertToRuntimeException(e);
+         throw JmsExceptionSupport.convertToRuntimeException(e);
       }
    }
 
@@ -295,7 +295,7 @@ public class KafkaJMSContext implements JMSContext {
       try {
          return session.createStreamMessage();
       } catch (JMSException e) {
-         throw JmsExceptionUtils.convertToRuntimeException(e);
+         throw JmsExceptionSupport.convertToRuntimeException(e);
       }
    }
 
@@ -305,7 +305,7 @@ public class KafkaJMSContext implements JMSContext {
       try {
          return session.createTextMessage();
       } catch (JMSException e) {
-         throw JmsExceptionUtils.convertToRuntimeException(e);
+         throw JmsExceptionSupport.convertToRuntimeException(e);
       }
    }
 
@@ -315,7 +315,7 @@ public class KafkaJMSContext implements JMSContext {
       try {
          return session.createTextMessage(text);
       } catch (JMSException e) {
-         throw JmsExceptionUtils.convertToRuntimeException(e);
+         throw JmsExceptionSupport.convertToRuntimeException(e);
       }
    }
 
@@ -325,7 +325,7 @@ public class KafkaJMSContext implements JMSContext {
       try {
          return session.getTransacted();
       } catch (JMSException e) {
-         throw JmsExceptionUtils.convertToRuntimeException(e);
+         throw JmsExceptionSupport.convertToRuntimeException(e);
       }
    }
 
@@ -341,7 +341,7 @@ public class KafkaJMSContext implements JMSContext {
       try {
          session.commit();
       } catch (JMSException e) {
-         throw JmsExceptionUtils.convertToRuntimeException(e);
+         throw JmsExceptionSupport.convertToRuntimeException(e);
       }
    }
 
@@ -352,7 +352,7 @@ public class KafkaJMSContext implements JMSContext {
       try {
          session.rollback();
       } catch (JMSException e) {
-         throw JmsExceptionUtils.convertToRuntimeException(e);
+         throw JmsExceptionSupport.convertToRuntimeException(e);
       }
    }
 
@@ -362,7 +362,7 @@ public class KafkaJMSContext implements JMSContext {
       try {
          session.recover();
       } catch (JMSException e) {
-         throw JmsExceptionUtils.convertToRuntimeException(e);
+         throw JmsExceptionSupport.convertToRuntimeException(e);
       }
    }
 
@@ -374,7 +374,7 @@ public class KafkaJMSContext implements JMSContext {
          checkAutoStart();
          return consumer;
       } catch (JMSException e) {
-         throw JmsExceptionUtils.convertToRuntimeException(e);
+         throw JmsExceptionSupport.convertToRuntimeException(e);
       }
    }
 
@@ -386,7 +386,7 @@ public class KafkaJMSContext implements JMSContext {
          checkAutoStart();
          return consumer;
       } catch (JMSException e) {
-         throw JmsExceptionUtils.convertToRuntimeException(e);
+         throw JmsExceptionSupport.convertToRuntimeException(e);
       }
    }
 
@@ -398,7 +398,7 @@ public class KafkaJMSContext implements JMSContext {
          checkAutoStart();
          return consumer;
       } catch (JMSException e) {
-         throw JmsExceptionUtils.convertToRuntimeException(e);
+         throw JmsExceptionSupport.convertToRuntimeException(e);
       }
    }
 
@@ -408,7 +408,7 @@ public class KafkaJMSContext implements JMSContext {
       try {
          return session.createQueue(queueName);
       } catch (JMSException e) {
-         throw JmsExceptionUtils.convertToRuntimeException(e);
+         throw JmsExceptionSupport.convertToRuntimeException(e);
       }
    }
 
@@ -418,7 +418,7 @@ public class KafkaJMSContext implements JMSContext {
       try {
          return session.createTopic(topicName);
       } catch (JMSException e) {
-         throw JmsExceptionUtils.convertToRuntimeException(e);
+         throw JmsExceptionSupport.convertToRuntimeException(e);
       }
    }
 
@@ -430,7 +430,7 @@ public class KafkaJMSContext implements JMSContext {
          checkAutoStart();
          return consumer;
       } catch (JMSException e) {
-         throw JmsExceptionUtils.convertToRuntimeException(e);
+         throw JmsExceptionSupport.convertToRuntimeException(e);
       }
    }
 
@@ -442,7 +442,7 @@ public class KafkaJMSContext implements JMSContext {
          checkAutoStart();
          return consumer;
       } catch (JMSException e) {
-         throw JmsExceptionUtils.convertToRuntimeException(e);
+         throw JmsExceptionSupport.convertToRuntimeException(e);
       }
    }
 
@@ -454,7 +454,7 @@ public class KafkaJMSContext implements JMSContext {
          checkAutoStart();
          return consumer;
       } catch (JMSException e) {
-         throw JmsExceptionUtils.convertToRuntimeException(e);
+         throw JmsExceptionSupport.convertToRuntimeException(e);
       }
    }
 
@@ -466,7 +466,7 @@ public class KafkaJMSContext implements JMSContext {
          checkAutoStart();
          return consumer;
       } catch (JMSException e) {
-         throw JmsExceptionUtils.convertToRuntimeException(e);
+         throw JmsExceptionSupport.convertToRuntimeException(e);
       }
    }
 
@@ -478,7 +478,7 @@ public class KafkaJMSContext implements JMSContext {
          checkAutoStart();
          return consumer;
       } catch (JMSException e) {
-         throw JmsExceptionUtils.convertToRuntimeException(e);
+         throw JmsExceptionSupport.convertToRuntimeException(e);
       }
    }
 
@@ -490,7 +490,7 @@ public class KafkaJMSContext implements JMSContext {
          checkAutoStart();
          return consumer;
       } catch (JMSException e) {
-         throw JmsExceptionUtils.convertToRuntimeException(e);
+         throw JmsExceptionSupport.convertToRuntimeException(e);
       }
    }
 
@@ -502,7 +502,7 @@ public class KafkaJMSContext implements JMSContext {
          checkAutoStart();
          return browser;
       } catch (JMSException e) {
-         throw JmsExceptionUtils.convertToRuntimeException(e);
+         throw JmsExceptionSupport.convertToRuntimeException(e);
       }
    }
 
@@ -514,7 +514,7 @@ public class KafkaJMSContext implements JMSContext {
          checkAutoStart();
          return browser;
       } catch (JMSException e) {
-         throw JmsExceptionUtils.convertToRuntimeException(e);
+         throw JmsExceptionSupport.convertToRuntimeException(e);
       }
    }
 
@@ -524,7 +524,7 @@ public class KafkaJMSContext implements JMSContext {
       try {
          return session.createTemporaryQueue();
       } catch (JMSException e) {
-         throw JmsExceptionUtils.convertToRuntimeException(e);
+         throw JmsExceptionSupport.convertToRuntimeException(e);
       }
    }
 
@@ -534,7 +534,7 @@ public class KafkaJMSContext implements JMSContext {
       try {
          return session.createTemporaryTopic();
       } catch (JMSException e) {
-         throw JmsExceptionUtils.convertToRuntimeException(e);
+         throw JmsExceptionSupport.convertToRuntimeException(e);
       }
    }
 
@@ -544,7 +544,7 @@ public class KafkaJMSContext implements JMSContext {
       try {
          session.unsubscribe(name);
       } catch (JMSException e) {
-         throw JmsExceptionUtils.convertToRuntimeException(e);
+         throw JmsExceptionSupport.convertToRuntimeException(e);
       }
    }
 
@@ -558,7 +558,7 @@ public class KafkaJMSContext implements JMSContext {
             lastMessagesWaitingAck.acknowledge();
          }
       } catch (JMSException e) {
-         throw JmsExceptionUtils.convertToRuntimeException(e);
+         throw JmsExceptionSupport.convertToRuntimeException(e);
       }
    }
 

@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.github.jmscomponents.kafka;
+package io.github.jmscomponents.kafka.jms;
 
 import javax.jms.JMSConsumer;
 import javax.jms.JMSException;
@@ -22,6 +22,8 @@ import javax.jms.JMSRuntimeException;
 import javax.jms.Message;
 import javax.jms.MessageConsumer;
 import javax.jms.MessageListener;
+
+import io.github.jmscomponents.kafka.jms.exception.JmsExceptionSupport;
 
 public class KafkaJMSConsumer implements JMSConsumer {
 
@@ -38,7 +40,7 @@ public class KafkaJMSConsumer implements JMSConsumer {
       try {
          return consumer.getMessageSelector();
       } catch (JMSException e) {
-         throw JmsExceptionUtils.convertToRuntimeException(e);
+         throw JmsExceptionSupport.convertToRuntimeException(e);
       }
    }
 
@@ -47,7 +49,7 @@ public class KafkaJMSConsumer implements JMSConsumer {
       try {
          return consumer.getMessageListener();
       } catch (JMSException e) {
-         throw JmsExceptionUtils.convertToRuntimeException(e);
+         throw JmsExceptionSupport.convertToRuntimeException(e);
       }
    }
 
@@ -56,7 +58,7 @@ public class KafkaJMSConsumer implements JMSConsumer {
       try {
          consumer.setMessageListener(new MessageListenerWrapper(listener));
       } catch (JMSException e) {
-         throw JmsExceptionUtils.convertToRuntimeException(e);
+         throw JmsExceptionSupport.convertToRuntimeException(e);
       }
    }
 
@@ -65,7 +67,7 @@ public class KafkaJMSConsumer implements JMSConsumer {
       try {
          return context.setLastMessage(this, consumer.receive());
       } catch (JMSException e) {
-         throw JmsExceptionUtils.convertToRuntimeException(e);
+         throw JmsExceptionSupport.convertToRuntimeException(e);
       }
    }
 
@@ -74,7 +76,7 @@ public class KafkaJMSConsumer implements JMSConsumer {
       try {
          return context.setLastMessage(this, consumer.receive(timeout));
       } catch (JMSException e) {
-         throw JmsExceptionUtils.convertToRuntimeException(e);
+         throw JmsExceptionSupport.convertToRuntimeException(e);
       }
    }
 
@@ -83,7 +85,7 @@ public class KafkaJMSConsumer implements JMSConsumer {
       try {
          return context.setLastMessage(this, consumer.receiveNoWait());
       } catch (JMSException e) {
-         throw JmsExceptionUtils.convertToRuntimeException(e);
+         throw JmsExceptionSupport.convertToRuntimeException(e);
       }
    }
 
@@ -92,7 +94,7 @@ public class KafkaJMSConsumer implements JMSConsumer {
       try {
          consumer.close();
       } catch (JMSException e) {
-         throw JmsExceptionUtils.convertToRuntimeException(e);
+         throw JmsExceptionSupport.convertToRuntimeException(e);
       }
    }
 
@@ -103,7 +105,7 @@ public class KafkaJMSConsumer implements JMSConsumer {
          context.setLastMessage(KafkaJMSConsumer.this, message);
          return message == null ? null : message.getBody(c);
       } catch (JMSException e) {
-         throw JmsExceptionUtils.convertToRuntimeException(e);
+         throw JmsExceptionSupport.convertToRuntimeException(e);
       }
    }
 
@@ -114,7 +116,7 @@ public class KafkaJMSConsumer implements JMSConsumer {
          context.setLastMessage(KafkaJMSConsumer.this, message);
          return message == null ? null : message.getBody(c);
       } catch (JMSException e) {
-         throw JmsExceptionUtils.convertToRuntimeException(e);
+         throw JmsExceptionSupport.convertToRuntimeException(e);
       }
    }
 
@@ -125,7 +127,7 @@ public class KafkaJMSConsumer implements JMSConsumer {
          context.setLastMessage(KafkaJMSConsumer.this, message);
          return message == null ? null : message.getBody(c);
       } catch (JMSException e) {
-         throw JmsExceptionUtils.convertToRuntimeException(e);
+         throw JmsExceptionSupport.convertToRuntimeException(e);
       }
    }
 
