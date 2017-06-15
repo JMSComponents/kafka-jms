@@ -16,7 +16,7 @@ import javax.jms.StreamMessage;
 import javax.jms.TextMessage;
 import java.io.IOException;
 
-import org.apache.kafka.clients.jms.KafkaConnectionFactory;
+import io.github.jmscomponents.kafka.jms.KafkaConnectionFactory;
 import org.apache.kafka.streams.integration.utils.EmbeddedKafkaCluster;
 import org.junit.After;
 import org.junit.Before;

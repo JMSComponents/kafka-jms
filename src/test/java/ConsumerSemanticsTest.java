@@ -14,7 +14,7 @@ import javax.jms.Topic;
 import java.io.IOException;
 import java.util.concurrent.atomic.AtomicReference;
 
-import org.apache.kafka.clients.jms.KafkaConnectionFactory;
+import io.github.jmscomponents.kafka.jms.KafkaConnectionFactory;
 import org.apache.kafka.streams.integration.utils.EmbeddedKafkaCluster;
 import org.junit.After;
 import org.junit.Before;

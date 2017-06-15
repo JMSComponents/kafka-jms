@@ -23,12 +23,11 @@ import java.io.Serializable;
 
 import javax.jms.JMSException;
 
-import org.apache.kafka.clients.jms.MessageFactory;
+import io.github.jmscomponents.kafka.jms.MessageFactory;
 import org.apache.qpid.jms.exceptions.JmsExceptionSupport;
 import org.apache.qpid.jms.message.JmsBytesMessage;
 import org.apache.qpid.jms.message.JmsMapMessage;
 import org.apache.qpid.jms.message.JmsMessage;
-import org.apache.qpid.jms.message.JmsMessageFactory;
 import org.apache.qpid.jms.message.JmsObjectMessage;
 import org.apache.qpid.jms.message.JmsStreamMessage;
 import org.apache.qpid.jms.message.JmsTextMessage;
