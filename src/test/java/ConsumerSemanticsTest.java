@@ -104,7 +104,7 @@ public class ConsumerSemanticsTest
 
             MessageConsumer messageConsumer = session.createConsumer(destination);
 
-            result = (TextMessage)messageConsumer.receive(100);
+            result = (TextMessage)messageConsumer.receive(1000);
          }
       }
 
@@ -131,11 +131,11 @@ public class ConsumerSemanticsTest
             messageProducer.close();
 
 
-            result = (TextMessage)messageConsumer.receive(100);
+            result = (TextMessage)messageConsumer.receive(1000);
          }
       }
 
-      assertEquals(text, result.getText());
+      assertEquals(text, result == null ? null : result.getText());
    }
 
 
@@ -166,7 +166,7 @@ public class ConsumerSemanticsTest
                      MessageConsumer messageConsumer2 = session2.createConsumer(destination2);
 
                      for(int i = 0; i < 100; i++){
-                        TextMessage message = (TextMessage) messageConsumer2.receive(100);
+                        TextMessage message = (TextMessage) messageConsumer2.receive(1000);
                         if (message!=null){
                            messageAtomicReference.set(message);
                            break;
@@ -188,7 +188,7 @@ public class ConsumerSemanticsTest
                      Topic destination2 = session2.createTopic(TOPIC_NAME);
                      MessageConsumer messageConsumer2 = session2.createConsumer(destination2);
                      for(int i = 0; i < 100; i++){
-                        TextMessage message = (TextMessage) messageConsumer2.receive(100);
+                        TextMessage message = (TextMessage) messageConsumer2.receive(1000);
                         if (message!=null){
                            messageAtomicReference2.set(message);
                            break;
@@ -214,8 +214,8 @@ public class ConsumerSemanticsTest
          }
       }
 
-      assertEquals(text, result.getText());
-      assertEquals(text, result2.getText());
+      assertEquals(text, result == null ? null : result.getText());
+      assertEquals(text, result2 == null ? null : result2.getText());
 
    }
 
@@ -249,7 +249,7 @@ public class ConsumerSemanticsTest
                      MessageConsumer messageConsumer2 = session2.createSharedDurableConsumer(destination2, "shared");
 
                      for(int i = 0; i < 100; i++){
-                        TextMessage message = (TextMessage) messageConsumer2.receive(100);
+                        TextMessage message = (TextMessage) messageConsumer2.receive(1000);
                         if (message!=null){
                            messageAtomicReference.set(message);
                            break;
@@ -270,7 +270,7 @@ public class ConsumerSemanticsTest
                      MessageConsumer messageConsumer2 = session2.createSharedDurableConsumer(destination2, "shared");
                   
                      for(int i = 0; i < 100; i++){
-                        TextMessage message = (TextMessage) messageConsumer2.receive(100);
+                        TextMessage message = (TextMessage) messageConsumer2.receive(1000);
                         if (message!=null){
                            messageAtomicReference2.set(message);
                            break;
@@ -295,7 +295,7 @@ public class ConsumerSemanticsTest
          }
       }
 
-      assertEquals(text, result == null ? result2.getText() : result.getText());
+      assertEquals(text, result == null ? result2 == null ? null : result2.getText() : result.getText());
       assertTrue(result == null ? result2 != null : true);
 
    }
@@ -363,7 +363,7 @@ public class ConsumerSemanticsTest
          }
       }
 
-      assertEquals(text, result == null ? result2.getText() : result.getText());
+      assertEquals(text, result == null ? result2 == null ? null : result2.getText() : result.getText());
       assertTrue(result == null ? result2 != null : true);
 
    }
@@ -391,7 +391,7 @@ public class ConsumerSemanticsTest
 
             messageProducer.close();
 
-            result = (TextMessage)messageConsumer.receive(100);
+            result = (TextMessage)messageConsumer.receive(1000);
 
             AtomicReference<TextMessage> messageAtomicReference = new AtomicReference<>();
 
@@ -402,7 +402,7 @@ public class ConsumerSemanticsTest
                      Queue destination2 = session2.createQueue(QUEUE_NAME);
                      MessageConsumer messageConsumer2 = session2.createConsumer(destination2);
 
-                     messageAtomicReference.set( (TextMessage) messageConsumer2.receive(100));
+                     messageAtomicReference.set( (TextMessage) messageConsumer2.receive(1000));
                   }
                } catch (JMSException jmse){
                   
@@ -410,14 +410,14 @@ public class ConsumerSemanticsTest
             });
             
             thread.start();
-            Thread.sleep(200);
+            Thread.sleep(2000);
             result2 = messageAtomicReference.get();
             
             
          }
       }
 
-      assertEquals(text, result.getText());
+      assertEquals(text, result == null ? null : result.getText());
       assertNull(result2);
       
 

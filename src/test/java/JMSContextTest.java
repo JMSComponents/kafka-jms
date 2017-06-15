@@ -68,10 +68,10 @@ public class JMSContextTest {
             jmsProducer.send(destination, text);
 
             JMSConsumer jmsConsumer = context.createConsumer(destination);
-            result = (TextMessage) jmsConsumer.receive(100);
+            result = (TextMessage) jmsConsumer.receive(1000);
         }
 
-        assertEquals(text, result.getText());
+        assertEquals(text, result == null ? null : result.getText());
     }
 
     @Test
@@ -87,15 +87,15 @@ public class JMSContextTest {
             jmsProducer.send(destination, text);
 
             JMSConsumer jmsConsumer = context.createConsumer(destination);
-            result = (TextMessage) jmsConsumer.receive(100);
+            result = (TextMessage) jmsConsumer.receive(1000);
 
             assertNull("topic subscription should only get messages after subscription", result);
 
             jmsProducer.send(destination, text);
 
-            result = (TextMessage) jmsConsumer.receive(100);
+            result = (TextMessage) jmsConsumer.receive(1000);
         }
 
-        assertEquals(text, result.getText());
+        assertEquals(text, result == null ? null : result.getText());
     }
 }
