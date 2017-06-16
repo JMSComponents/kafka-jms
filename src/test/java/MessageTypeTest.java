@@ -52,7 +52,7 @@ public class MessageTypeTest extends BaseKafkaJMSTest
             
             MessageConsumer messageConsumer = session.createConsumer(destination);
             
-            result = (TextMessage)messageConsumer.receive(100);
+            result = (TextMessage)messageConsumer.receive(10000);
          }
       }
 
@@ -78,7 +78,7 @@ public class MessageTypeTest extends BaseKafkaJMSTest
 
             MessageConsumer messageConsumer = session.createConsumer(destination);
 
-            result = (BytesMessage)messageConsumer.receive(100);
+            result = (BytesMessage)messageConsumer.receive(10000);
          }
       }
       assertEquals(5, result.readInt());
@@ -107,7 +107,7 @@ public class MessageTypeTest extends BaseKafkaJMSTest
 
             MessageConsumer messageConsumer = session.createConsumer(destination);
 
-            result = (MapMessage)messageConsumer.receive(100);
+            result = (MapMessage)messageConsumer.receive(10000);
          }
       }
 
@@ -134,7 +134,7 @@ public class MessageTypeTest extends BaseKafkaJMSTest
 
             MessageConsumer messageConsumer = session.createConsumer(destination);
 
-            result = (ObjectMessage)messageConsumer.receive(100);
+            result = (ObjectMessage)messageConsumer.receive(10000);
          }
       }
 
@@ -162,7 +162,7 @@ public class MessageTypeTest extends BaseKafkaJMSTest
 
             MessageConsumer messageConsumer = session.createConsumer(destination);
 
-            result = (StreamMessage)messageConsumer.receive(100);
+            result = (StreamMessage)messageConsumer.receive(10000);
          }
       }
 

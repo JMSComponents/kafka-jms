@@ -49,7 +49,7 @@ public class ConsumerSemanticsTest extends BaseKafkaJMSTest {
             
             MessageConsumer messageConsumer = session.createConsumer(destination);
             
-            result = (TextMessage)messageConsumer.receive(100);
+            result = (TextMessage)messageConsumer.receive(10000);
          }
       }
 
@@ -73,7 +73,7 @@ public class ConsumerSemanticsTest extends BaseKafkaJMSTest {
 
             MessageConsumer messageConsumer = session.createConsumer(destination);
 
-            result = (TextMessage)messageConsumer.receive(100);
+            result = (TextMessage)messageConsumer.receive(10000);
          }
       }
 
@@ -90,7 +90,7 @@ public class ConsumerSemanticsTest extends BaseKafkaJMSTest {
          try(Session session = connection.createSession()){
             Topic destination = session.createTopic(TOPIC_NAME);
             MessageConsumer messageConsumer = session.createConsumer(destination);
-            messageConsumer.receive(100);
+            messageConsumer.receive(10000);
             MessageProducer messageProducer = session.createProducer(destination);
 
             messageProducer.send(session.createTextMessage(text));
@@ -98,7 +98,7 @@ public class ConsumerSemanticsTest extends BaseKafkaJMSTest {
             messageProducer.close();
 
 
-            result = (TextMessage)messageConsumer.receive(100);
+            result = (TextMessage)messageConsumer.receive(10000);
          }
       }
 
@@ -131,7 +131,7 @@ public class ConsumerSemanticsTest extends BaseKafkaJMSTest {
                      MessageConsumer messageConsumer2 = session2.createConsumer(destination2);
 
                      for(int i = 0; i < 100; i++){
-                        TextMessage message = (TextMessage) messageConsumer2.receive(100);
+                        TextMessage message = (TextMessage) messageConsumer2.receive(10000);
                         if (message!=null){
                            messageAtomicReference.set(message);
                            break;
@@ -153,7 +153,7 @@ public class ConsumerSemanticsTest extends BaseKafkaJMSTest {
                      Topic destination2 = session2.createTopic(TOPIC_NAME);
                      MessageConsumer messageConsumer2 = session2.createConsumer(destination2);
                      for(int i = 0; i < 100; i++){
-                        TextMessage message = (TextMessage) messageConsumer2.receive(100);
+                        TextMessage message = (TextMessage) messageConsumer2.receive(10000);
                         if (message!=null){
                            messageAtomicReference2.set(message);
                            break;
@@ -166,14 +166,14 @@ public class ConsumerSemanticsTest extends BaseKafkaJMSTest {
             });
             thread2.start();
             
-            Thread.sleep(1000);
+            Thread.sleep(10000);
 
 
             messageProducer.send(session.createTextMessage(text));
 
             messageProducer.close();
 
-            Thread.sleep(2000);
+            Thread.sleep(20000);
             result = messageAtomicReference.get();
             result2 = messageAtomicReference2.get();
          }
@@ -212,7 +212,7 @@ public class ConsumerSemanticsTest extends BaseKafkaJMSTest {
                      MessageConsumer messageConsumer2 = session2.createSharedDurableConsumer(destination2, "shared");
 
                      for(int i = 0; i < 100; i++){
-                        TextMessage message = (TextMessage) messageConsumer2.receive(100);
+                        TextMessage message = (TextMessage) messageConsumer2.receive(10000);
                         if (message!=null){
                            messageAtomicReference.set(message);
                            break;
@@ -233,7 +233,7 @@ public class ConsumerSemanticsTest extends BaseKafkaJMSTest {
                      MessageConsumer messageConsumer2 = session2.createSharedDurableConsumer(destination2, "shared");
                   
                      for(int i = 0; i < 100; i++){
-                        TextMessage message = (TextMessage) messageConsumer2.receive(100);
+                        TextMessage message = (TextMessage) messageConsumer2.receive(10000);
                         if (message!=null){
                            messageAtomicReference2.set(message);
                            break;
@@ -246,13 +246,13 @@ public class ConsumerSemanticsTest extends BaseKafkaJMSTest {
             });
             thread2.start();
 
-            Thread.sleep(1000);
+            Thread.sleep(10000);
 
             messageProducer.send(session.createTextMessage(text));
 
             messageProducer.close();
 
-            Thread.sleep(2000);
+            Thread.sleep(20000);
             result = messageAtomicReference.get();
             result2 = messageAtomicReference2.get();
          }
@@ -289,7 +289,7 @@ public class ConsumerSemanticsTest extends BaseKafkaJMSTest {
                      Queue destination2 = session2.createQueue(QUEUE_NAME);
                      MessageConsumer messageConsumer2 = session2.createConsumer(destination2);
 
-                     messageAtomicReference.set( (TextMessage) messageConsumer2.receive(100));
+                     messageAtomicReference.set( (TextMessage) messageConsumer2.receive(10000));
                   }
                } catch (JMSException jmse){
 
@@ -305,7 +305,7 @@ public class ConsumerSemanticsTest extends BaseKafkaJMSTest {
                      Queue destination2 = session2.createQueue(QUEUE_NAME);
                      MessageConsumer messageConsumer2 = session2.createConsumer(destination2);
 
-                     messageAtomicReference2.set( (TextMessage) messageConsumer2.receive(100));
+                     messageAtomicReference2.set( (TextMessage) messageConsumer2.receive(10000));
                   }
                } catch (JMSException jmse){
 
@@ -318,7 +318,7 @@ public class ConsumerSemanticsTest extends BaseKafkaJMSTest {
 
             messageProducer.close();
             
-            Thread.sleep(2000);
+            Thread.sleep(20000);
             result = messageAtomicReference.get();
             result2 = messageAtomicReference2.get();
          }
@@ -342,7 +342,7 @@ public class ConsumerSemanticsTest extends BaseKafkaJMSTest {
             Queue destination = session.createQueue(QUEUE_NAME);
             MessageConsumer messageConsumer = session.createConsumer(destination);
 
-            messageConsumer.receive(100);
+            messageConsumer.receive(10000);
 
             MessageProducer messageProducer = session.createProducer(destination);
 
@@ -350,7 +350,7 @@ public class ConsumerSemanticsTest extends BaseKafkaJMSTest {
 
             messageProducer.close();
 
-            result = (TextMessage)messageConsumer.receive(100);
+            result = (TextMessage)messageConsumer.receive(10000);
 
             AtomicReference<TextMessage> messageAtomicReference = new AtomicReference<>();
 
@@ -361,7 +361,7 @@ public class ConsumerSemanticsTest extends BaseKafkaJMSTest {
                      Queue destination2 = session2.createQueue(QUEUE_NAME);
                      MessageConsumer messageConsumer2 = session2.createConsumer(destination2);
 
-                     messageAtomicReference.set( (TextMessage) messageConsumer2.receive(100));
+                     messageAtomicReference.set( (TextMessage) messageConsumer2.receive(10000));
                   }
                } catch (JMSException jmse){
                   
@@ -369,7 +369,7 @@ public class ConsumerSemanticsTest extends BaseKafkaJMSTest {
             });
             
             thread.start();
-            Thread.sleep(2000);
+            Thread.sleep(20000);
             result2 = messageAtomicReference.get();
             
             

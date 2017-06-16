@@ -26,10 +26,6 @@ import javax.jms.TextMessage;
 import javax.jms.Topic;
 import java.io.IOException;
 
-import io.github.jmscomponents.kafka.jms.KafkaConnectionFactory;
-import org.apache.kafka.streams.integration.utils.EmbeddedKafkaCluster;
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 
 public class JMSContextTest extends BaseKafkaJMSTest {
@@ -45,7 +41,7 @@ public class JMSContextTest extends BaseKafkaJMSTest {
             jmsProducer.send(destination, text);
 
             JMSConsumer jmsConsumer = context.createConsumer(destination);
-            result = (TextMessage) jmsConsumer.receive(100);
+            result = (TextMessage) jmsConsumer.receive(10000);
         }
 
         assertEquals(text, result == null ? null : result.getText());
@@ -62,13 +58,13 @@ public class JMSContextTest extends BaseKafkaJMSTest {
             jmsProducer.send(destination, text);
 
             JMSConsumer jmsConsumer = context.createConsumer(destination);
-            result = (TextMessage) jmsConsumer.receive(100);
+            result = (TextMessage) jmsConsumer.receive(10000);
 
             assertNull("topic subscription should only get messages after subscription", result);
 
             jmsProducer.send(destination, text);
 
-            result = (TextMessage) jmsConsumer.receive(100);
+            result = (TextMessage) jmsConsumer.receive(10000);
         }
 
         assertEquals(text, result == null ? null : result.getText());
