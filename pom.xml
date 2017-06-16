@@ -86,35 +86,54 @@
                 <artifactId>maven-release-plugin</artifactId>
                 <version>2.5.1</version>
             </plugin>
+
+            <plugin>
+                <groupId>com.devexperts.bintray</groupId>
+                <artifactId>bintray-maven-plugin</artifactId>
+                <version>1.2</version>
+                <configuration>
+                    <id>bintray-jmscomponents-maven</id>
+                    <url>http://api.bintray.com/maven/jmscomponents/maven-repo/kafka-jms/</url>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>bintray-deploy</id>
+                        <goals>
+                            <goal>deploy</goal>
+                            <goal>publish</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
 
-    <repositories>
-        <repository>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-            <id>bintray-jmscomponents-maven</id>
-            <name>bintray</name>
-            <url>http://dl.bintray.com/jmscomponents/maven</url>
-        </repository>
-    </repositories>
-    <pluginRepositories>
-        <pluginRepository>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-            <id>bintray-jmscomponents-maven</id>
-            <name>bintray-plugins</name>
-            <url>http://dl.bintray.com/jmscomponents/maven</url>
-        </pluginRepository>
-    </pluginRepositories>
+    <!--<repositories>-->
+        <!--<repository>-->
+            <!--<snapshots>-->
+                <!--<enabled>true</enabled>-->
+            <!--</snapshots>-->
+            <!--<id>bintray-jmscomponents-maven</id>-->
+            <!--<name>bintray</name>-->
+            <!--<url>http://dl.bintray.com/jmscomponents/maven</url>-->
+        <!--</repository>-->
+    <!--</repositories>-->
+    <!--<pluginRepositories>-->
+        <!--<pluginRepository>-->
+            <!--<snapshots>-->
+                <!--<enabled>true</enabled>-->
+            <!--</snapshots>-->
+            <!--<id>bintray-jmscomponents-maven</id>-->
+            <!--<name>bintray-plugins</name>-->
+            <!--<url>http://dl.bintray.com/jmscomponents/maven</url>-->
+        <!--</pluginRepository>-->
+    <!--</pluginRepositories>-->
 
     <distributionManagement>
         <repository>
             <id>bintray-jmscomponents-maven</id>
             <name>jmscomponents-maven</name>
-            <url>https://api.bintray.com/maven/jmscomponents/maven/kafka-jms/;publish=1</url>
+            <url>http://api.bintray.com/maven/jmscomponents/maven-repo/kafka-jms/;publish=1</url>
         </repository>
     </distributionManagement>
 
