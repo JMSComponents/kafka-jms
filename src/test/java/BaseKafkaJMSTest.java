@@ -22,6 +22,8 @@ public class BaseKafkaJMSTest {
         properties.setProperty("group.min.session.timeout.ms", "50000");
         properties.setProperty("zookeeper.session.timeout.ms", "10000");
         properties.setProperty("zookeeper.sync.time.ms", "5000");
+        properties.setProperty("fetch.max.wait.ms", "1000");
+        properties.setProperty("session.timeout.ms", "60000");
         embeddedKafkaCluster = new EmbeddedKafkaCluster(1, properties);
         embeddedKafkaCluster.start();
         embeddedKafkaCluster.createTopic(TOPIC_NAME);
