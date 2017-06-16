@@ -51,8 +51,9 @@ public class BaseKafkaJMSIT {
     }
     
     @After
-    public void after(){
+    public void after() throws InterruptedException {
         embeddedKafkaCluster.stop();
+        Thread.sleep(10000);
     }
 
 }
