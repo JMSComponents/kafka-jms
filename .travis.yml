@@ -1,12 +1,13 @@
-os: osx
+sudo: false
 
 language: java 
-
+jdk:
+  - oraclejdk8
 cache:
   directories:
   - "$HOME/.cache"
 after_success:
-  - mvn deploy --settings travis-settings.xml -DskipTests=true -B
+  - mvn deploy --settings travis-settings.xml -DskipTests=true -B -Pbintray
 notifications:
   email:
     recipients:
