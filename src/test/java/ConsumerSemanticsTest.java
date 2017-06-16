@@ -19,7 +19,6 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import javax.jms.Connection;
-import javax.jms.ConnectionFactory;
 import javax.jms.JMSException;
 import javax.jms.MessageConsumer;
 import javax.jms.MessageProducer;
@@ -30,17 +29,11 @@ import javax.jms.Topic;
 import java.io.IOException;
 import java.util.concurrent.atomic.AtomicReference;
 
-import io.github.jmscomponents.kafka.jms.KafkaConnectionFactory;
-import org.apache.kafka.streams.integration.utils.EmbeddedKafkaCluster;
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 
 public class ConsumerSemanticsTest extends BaseKafkaJMSTest {
    @Test
    public void testQueueEnsureMessageSentBeforeSubscribeIsConsumed() throws IOException, InterruptedException, JMSException {
-
-      ConnectionFactory connectionFactory = new KafkaConnectionFactory(embeddedKafkaCluster.bootstrapServers());
       
       String text = "testString";
       TextMessage result;
@@ -65,9 +58,7 @@ public class ConsumerSemanticsTest extends BaseKafkaJMSTest {
 
    @Test
    public void testTopicEnsureMessageSentBeforeSubscribeIsNotConsumed() throws IOException, InterruptedException, JMSException {
-
-      ConnectionFactory connectionFactory = new KafkaConnectionFactory(embeddedKafkaCluster.bootstrapServers());
-
+      
       String text = "testString";
       TextMessage result;
       try(Connection connection = connectionFactory.createConnection()){
@@ -91,9 +82,7 @@ public class ConsumerSemanticsTest extends BaseKafkaJMSTest {
 
    @Test
    public void testTopicEnsureMessageSentAfterSubscribeIsConsumed() throws IOException, InterruptedException, JMSException {
-
-      ConnectionFactory connectionFactory = new KafkaConnectionFactory(embeddedKafkaCluster.bootstrapServers());
-
+      
       String text = "testString";
       TextMessage result;
       try(Connection connection = connectionFactory.createConnection()){
@@ -119,9 +108,7 @@ public class ConsumerSemanticsTest extends BaseKafkaJMSTest {
 
    @Test
    public void testTopicTwoConsumersEachGetMessage() throws IOException, InterruptedException, JMSException {
-
-      ConnectionFactory connectionFactory = new KafkaConnectionFactory(embeddedKafkaCluster.bootstrapServers());
-
+      
       String text = "testString";
       TextMessage result;
       TextMessage result2;
@@ -201,9 +188,7 @@ public class ConsumerSemanticsTest extends BaseKafkaJMSTest {
 
    @Test
    public void testTopicTwoSharedDurableConsumersGetOnlyOneMessage() throws IOException, InterruptedException, JMSException {
-
-      ConnectionFactory connectionFactory = new KafkaConnectionFactory(embeddedKafkaCluster.bootstrapServers());
-
+      
       String text = "testString";
       TextMessage result;
       TextMessage result2;
@@ -281,9 +266,7 @@ public class ConsumerSemanticsTest extends BaseKafkaJMSTest {
 
    @Test
    public void testQueueTwoConsumersGetOnlyOneMessage() throws IOException, InterruptedException, JMSException {
-
-      ConnectionFactory connectionFactory = new KafkaConnectionFactory(embeddedKafkaCluster.bootstrapServers());
-
+      
       String text = "testString";
       TextMessage result;
       TextMessage result2;
@@ -348,9 +331,7 @@ public class ConsumerSemanticsTest extends BaseKafkaJMSTest {
 
    @Test
    public void testTopicNonDurableDoesntReceiveMessagesWhilstNotConnected() throws IOException, InterruptedException, JMSException {
-
-      ConnectionFactory connectionFactory = new KafkaConnectionFactory(embeddedKafkaCluster.bootstrapServers());
-
+      
       String text = "testString";
       TextMessage result;
       TextMessage result2;

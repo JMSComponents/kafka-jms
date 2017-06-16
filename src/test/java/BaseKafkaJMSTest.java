@@ -1,6 +1,10 @@
+import javax.jms.Connection;
+import javax.jms.ConnectionFactory;
+import javax.jms.JMSException;
 import java.io.IOException;
 import java.util.Properties;
 
+import io.github.jmscomponents.kafka.jms.KafkaConnectionFactory;
 import org.apache.kafka.streams.integration.utils.EmbeddedKafkaCluster;
 import org.junit.After;
 import org.junit.Before;
@@ -14,10 +18,10 @@ public class BaseKafkaJMSTest {
     static String QUEUE_NAME = "queue";
     
     EmbeddedKafkaCluster embeddedKafkaCluster;
+    KafkaConnectionFactory connectionFactory;
 
     @Before
-    public void before() throws IOException, InterruptedException
-    {
+    public void before() throws IOException, InterruptedException, JMSException {
         Properties properties = new Properties();
         properties.setProperty("group.min.session.timeout.ms", "50000");
         properties.setProperty("zookeeper.session.timeout.ms", "10000");
@@ -29,6 +33,8 @@ public class BaseKafkaJMSTest {
         embeddedKafkaCluster.createTopic(TOPIC_NAME);
         embeddedKafkaCluster.createTopic(QUEUE_NAME);
         Thread.sleep(10000);
+        connectionFactory = new KafkaConnectionFactory(embeddedKafkaCluster.bootstrapServers());
+        connectionFactory.setProperties(properties);
 
     }
     

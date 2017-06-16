@@ -37,9 +37,7 @@ public class JMSContextTest extends BaseKafkaJMSTest {
 
     @Test
     public void testQueue() throws IOException, InterruptedException, JMSException {
-
-        ConnectionFactory connectionFactory = new KafkaConnectionFactory(embeddedKafkaCluster.bootstrapServers());
-
+        
         String text = "testString";
         TextMessage result;
         try(JMSContext context = connectionFactory.createContext()){
@@ -56,9 +54,7 @@ public class JMSContextTest extends BaseKafkaJMSTest {
 
     @Test
     public void testTopic() throws IOException, InterruptedException, JMSException {
-
-        ConnectionFactory connectionFactory = new KafkaConnectionFactory(embeddedKafkaCluster.bootstrapServers());
-
+        
         String text = "testString";
         TextMessage result;
         try(JMSContext context = connectionFactory.createContext()){

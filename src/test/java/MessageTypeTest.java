@@ -41,8 +41,6 @@ public class MessageTypeTest extends BaseKafkaJMSTest
    
    @Test
    public void testTextMessage() throws IOException, InterruptedException, JMSException {
-
-      ConnectionFactory connectionFactory = new KafkaConnectionFactory(embeddedKafkaCluster.bootstrapServers());
       
       String text = "testStringtestString";
       TextMessage result;
@@ -67,9 +65,7 @@ public class MessageTypeTest extends BaseKafkaJMSTest
 
    @Test
    public void testBytesMessage() throws IOException, InterruptedException, JMSException {
-
-      ConnectionFactory connectionFactory = new KafkaConnectionFactory(embeddedKafkaCluster.bootstrapServers());
-
+      
       String text = "testString";
       BytesMessage result;
       try(Connection connection = connectionFactory.createConnection()){
@@ -96,9 +92,7 @@ public class MessageTypeTest extends BaseKafkaJMSTest
 
    @Test
    public void testMapMessage() throws IOException, InterruptedException, JMSException {
-
-      ConnectionFactory connectionFactory = new KafkaConnectionFactory(embeddedKafkaCluster.bootstrapServers());
-
+      
       String key = "key";
       String value = "value";
 
@@ -126,9 +120,7 @@ public class MessageTypeTest extends BaseKafkaJMSTest
 
    @Test
    public void testObjectMessage() throws IOException, InterruptedException, JMSException {
-
-      ConnectionFactory connectionFactory = new KafkaConnectionFactory(embeddedKafkaCluster.bootstrapServers());
-
+      
       String value = "value";
 
       ObjectMessage result;
@@ -156,9 +148,7 @@ public class MessageTypeTest extends BaseKafkaJMSTest
 
    @Test
    public void testStreamMessage() throws IOException, InterruptedException, JMSException {
-
-      ConnectionFactory connectionFactory = new KafkaConnectionFactory(embeddedKafkaCluster.bootstrapServers());
-
+      
       String value = "value";
 
       StreamMessage result;
