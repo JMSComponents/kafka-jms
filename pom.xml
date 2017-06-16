@@ -114,7 +114,7 @@
         <repository>
             <id>bintray-jmscomponents-maven</id>
             <name>jmscomponents-maven</name>
-            <url>https://api.bintray.com/maven/jmscomponents/maven/kafka-jms/</url>
+            <url>https://api.bintray.com/maven/jmscomponents</url>
         </repository>
     </distributionManagement>
 
