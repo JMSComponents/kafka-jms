@@ -31,7 +31,7 @@ public class BaseKafkaJMSTest {
         embeddedKafkaCluster.start();
         embeddedKafkaCluster.createTopic(TOPIC_NAME);
         embeddedKafkaCluster.createTopic(QUEUE_NAME);
-        Thread.sleep(10000);
+        Thread.sleep(1000);
         connectionFactory = new KafkaConnectionFactory(embeddedKafkaCluster.bootstrapServers());
         connectionFactory.setProperties(properties);
 

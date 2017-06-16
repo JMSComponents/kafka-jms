@@ -30,10 +30,6 @@ import javax.jms.StreamMessage;
 import javax.jms.TextMessage;
 import java.io.IOException;
 
-import io.github.jmscomponents.kafka.jms.KafkaConnectionFactory;
-import org.apache.kafka.streams.integration.utils.EmbeddedKafkaCluster;
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 
 public class MessageTypeTest extends BaseKafkaJMSTest
@@ -56,7 +52,7 @@ public class MessageTypeTest extends BaseKafkaJMSTest
             
             MessageConsumer messageConsumer = session.createConsumer(destination);
             
-            result = (TextMessage)messageConsumer.receive(10000);
+            result = (TextMessage)messageConsumer.receive(100);
          }
       }
 
@@ -82,7 +78,7 @@ public class MessageTypeTest extends BaseKafkaJMSTest
 
             MessageConsumer messageConsumer = session.createConsumer(destination);
 
-            result = (BytesMessage)messageConsumer.receive(10000);
+            result = (BytesMessage)messageConsumer.receive(100);
          }
       }
       assertEquals(5, result.readInt());
@@ -111,7 +107,7 @@ public class MessageTypeTest extends BaseKafkaJMSTest
 
             MessageConsumer messageConsumer = session.createConsumer(destination);
 
-            result = (MapMessage)messageConsumer.receive(10000);
+            result = (MapMessage)messageConsumer.receive(100);
          }
       }
 
@@ -138,7 +134,7 @@ public class MessageTypeTest extends BaseKafkaJMSTest
 
             MessageConsumer messageConsumer = session.createConsumer(destination);
 
-            result = (ObjectMessage)messageConsumer.receive(10000);
+            result = (ObjectMessage)messageConsumer.receive(100);
          }
       }
 
@@ -166,7 +162,7 @@ public class MessageTypeTest extends BaseKafkaJMSTest
 
             MessageConsumer messageConsumer = session.createConsumer(destination);
 
-            result = (StreamMessage)messageConsumer.receive(10000);
+            result = (StreamMessage)messageConsumer.receive(100);
          }
       }
 
