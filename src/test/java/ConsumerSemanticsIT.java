@@ -32,6 +32,8 @@ import java.util.concurrent.atomic.AtomicReference;
 import org.junit.Test;
 
 public class ConsumerSemanticsIT extends BaseKafkaJMSIT {
+   
+
    @Test
    public void testQueueEnsureMessageSentBeforeSubscribeIsConsumed() throws IOException, InterruptedException, JMSException {
       
@@ -40,7 +42,7 @@ public class ConsumerSemanticsIT extends BaseKafkaJMSIT {
       try(Connection connection = connectionFactory.createConnection()){
          connection.start();
          try(Session session = connection.createSession()){
-            Queue destination = session.createQueue(QUEUE_NAME);
+            Queue destination = session.createQueue("testQueueEnsureMessageSentBeforeSubscribeIsConsumed");
             MessageProducer messageProducer = session.createProducer(destination);
 
             messageProducer.send(session.createTextMessage(text));
@@ -64,7 +66,7 @@ public class ConsumerSemanticsIT extends BaseKafkaJMSIT {
       try(Connection connection = connectionFactory.createConnection()){
          connection.start();
          try(Session session = connection.createSession()){
-            Topic destination = session.createTopic(TOPIC_NAME);
+            Topic destination = session.createTopic("testTopicEnsureMessageSentBeforeSubscribeIsNotConsumed");
             MessageProducer messageProducer = session.createProducer(destination);
 
             messageProducer.send(session.createTextMessage(text));
@@ -88,7 +90,7 @@ public class ConsumerSemanticsIT extends BaseKafkaJMSIT {
       try(Connection connection = connectionFactory.createConnection()){
          connection.start();
          try(Session session = connection.createSession()){
-            Topic destination = session.createTopic(TOPIC_NAME);
+            Topic destination = session.createTopic("testTopicEnsureMessageSentAfterSubscribeIsConsumed");
             MessageConsumer messageConsumer = session.createConsumer(destination);
             messageConsumer.receive(1000);
             MessageProducer messageProducer = session.createProducer(destination);
@@ -116,7 +118,7 @@ public class ConsumerSemanticsIT extends BaseKafkaJMSIT {
       try(Connection connection = connectionFactory.createConnection()){
          connection.start();
          try(Session session = connection.createSession()){
-            Topic destination = session.createTopic(TOPIC_NAME);
+            Topic destination = session.createTopic("testTopicTwoConsumersEachGetMessage");
 
             MessageProducer messageProducer = session.createProducer(destination);
             
@@ -127,7 +129,7 @@ public class ConsumerSemanticsIT extends BaseKafkaJMSIT {
                   connection2.setClientID("1");
                   connection2.start();
                   try (Session session2 = connection2.createSession()) {
-                     Topic destination2 = session2.createTopic(TOPIC_NAME);
+                     Topic destination2 = session2.createTopic("testTopicTwoConsumersEachGetMessage");
                      MessageConsumer messageConsumer2 = session2.createConsumer(destination2);
 
                      for(int i = 0; i < 1000; i++){
@@ -150,7 +152,7 @@ public class ConsumerSemanticsIT extends BaseKafkaJMSIT {
                   connection2.setClientID("2");
                   connection2.start();
                   try (Session session2 = connection2.createSession()) {
-                     Topic destination2 = session2.createTopic(TOPIC_NAME);
+                     Topic destination2 = session2.createTopic("testTopicTwoConsumersEachGetMessage");
                      MessageConsumer messageConsumer2 = session2.createConsumer(destination2);
                      for(int i = 0; i < 1000; i++){
                         TextMessage message = (TextMessage) messageConsumer2.receive(1000);
@@ -196,7 +198,7 @@ public class ConsumerSemanticsIT extends BaseKafkaJMSIT {
       try(Connection connection = connectionFactory.createConnection()){
          connection.start();
          try(Session session = connection.createSession()){
-            Topic destination = session.createTopic(TOPIC_NAME);
+            Topic destination = session.createTopic("testTopicTwoSharedDurableConsumersGetOnlyOneMessage");
 
             MessageProducer messageProducer = session.createProducer(destination);
 
@@ -208,7 +210,7 @@ public class ConsumerSemanticsIT extends BaseKafkaJMSIT {
                try (Connection connection2 = connectionFactory.createConnection()) {
                   connection2.start();
                   try (Session session2 = connection2.createSession()) {
-                     Topic destination2 = session2.createTopic(TOPIC_NAME);
+                     Topic destination2 = session2.createTopic("testTopicTwoSharedDurableConsumersGetOnlyOneMessage");
                      MessageConsumer messageConsumer2 = session2.createSharedDurableConsumer(destination2, "shared");
 
                      for(int i = 0; i < 1000; i++){
@@ -229,7 +231,7 @@ public class ConsumerSemanticsIT extends BaseKafkaJMSIT {
                try (Connection connection2 = connectionFactory.createConnection()) {
                   connection2.start();
                   try (Session session2 = connection2.createSession()) {
-                     Topic destination2 = session2.createTopic(TOPIC_NAME);
+                     Topic destination2 = session2.createTopic("testTopicTwoSharedDurableConsumersGetOnlyOneMessage");
                      MessageConsumer messageConsumer2 = session2.createSharedDurableConsumer(destination2, "shared");
                   
                      for(int i = 0; i < 1000; i++){
@@ -252,7 +254,7 @@ public class ConsumerSemanticsIT extends BaseKafkaJMSIT {
 
             messageProducer.close();
 
-            Thread.sleep(2000);
+            Thread.sleep(10000);
             result = messageAtomicReference.get();
             result2 = messageAtomicReference2.get();
          }
@@ -274,7 +276,7 @@ public class ConsumerSemanticsIT extends BaseKafkaJMSIT {
       try(Connection connection = connectionFactory.createConnection()){
          connection.start();
          try(Session session = connection.createSession()){
-            Queue destination = session.createQueue(QUEUE_NAME);
+            Queue destination = session.createQueue("testQueueTwoConsumersGetOnlyOneMessage");
             
             MessageProducer messageProducer = session.createProducer(destination);
 
@@ -286,7 +288,7 @@ public class ConsumerSemanticsIT extends BaseKafkaJMSIT {
                try (Connection connection2 = connectionFactory.createConnection()) {
                   connection2.start();
                   try (Session session2 = connection2.createSession()) {
-                     Queue destination2 = session2.createQueue(QUEUE_NAME);
+                     Queue destination2 = session2.createQueue("testQueueTwoConsumersGetOnlyOneMessage");
                      MessageConsumer messageConsumer2 = session2.createConsumer(destination2);
 
                      messageAtomicReference.set( (TextMessage) messageConsumer2.receive(1000));
@@ -302,7 +304,7 @@ public class ConsumerSemanticsIT extends BaseKafkaJMSIT {
                try (Connection connection2 = connectionFactory.createConnection()) {
                   connection2.start();
                   try (Session session2 = connection2.createSession()) {
-                     Queue destination2 = session2.createQueue(QUEUE_NAME);
+                     Queue destination2 = session2.createQueue("testQueueTwoConsumersGetOnlyOneMessage");
                      MessageConsumer messageConsumer2 = session2.createConsumer(destination2);
 
                      messageAtomicReference2.set( (TextMessage) messageConsumer2.receive(1000));
@@ -339,7 +341,7 @@ public class ConsumerSemanticsIT extends BaseKafkaJMSIT {
       try(Connection connection = connectionFactory.createConnection()){
          connection.start();
          try(Session session = connection.createSession()){
-            Queue destination = session.createQueue(QUEUE_NAME);
+            Topic destination = session.createTopic("testTopicNonDurableDoesntReceiveMessagesWhilstNotConnected");
             MessageConsumer messageConsumer = session.createConsumer(destination);
 
             messageConsumer.receive(1000);
@@ -358,7 +360,7 @@ public class ConsumerSemanticsIT extends BaseKafkaJMSIT {
                try (Connection connection2 = connectionFactory.createConnection()) {
                   connection.start();
                   try (Session session2 = connection2.createSession()) {
-                     Queue destination2 = session2.createQueue(QUEUE_NAME);
+                     Topic destination2 = session2.createTopic("testTopicNonDurableDoesntReceiveMessagesWhilstNotConnected");
                      MessageConsumer messageConsumer2 = session2.createConsumer(destination2);
 
                      messageAtomicReference.set( (TextMessage) messageConsumer2.receive(1000));

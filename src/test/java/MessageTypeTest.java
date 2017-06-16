@@ -31,7 +31,7 @@ import java.io.IOException;
 
 import org.junit.Test;
 
-public class MessageTypeTest extends BaseKafkaJMSIT
+public class MessageTypeTest extends BaseKafkaJMSTest
 {
    
    @Test
@@ -42,7 +42,7 @@ public class MessageTypeTest extends BaseKafkaJMSIT
       try(Connection connection = connectionFactory.createConnection()){
          connection.start();
          try(Session session = connection.createSession()){
-            Queue destination = session.createQueue(QUEUE_NAME);
+            Queue destination = session.createQueue("testTextMessage");
             MessageProducer messageProducer = session.createProducer(destination);
 
             messageProducer.send(session.createTextMessage(text));
@@ -66,7 +66,7 @@ public class MessageTypeTest extends BaseKafkaJMSIT
       try(Connection connection = connectionFactory.createConnection()){
          connection.start();
          try(Session session = connection.createSession()){
-            Queue destination = session.createQueue(QUEUE_NAME);
+            Queue destination = session.createQueue("testBytesMessage");
             MessageProducer messageProducer = session.createProducer(destination);
 
             BytesMessage bytesMessage = session.createBytesMessage();
@@ -95,7 +95,7 @@ public class MessageTypeTest extends BaseKafkaJMSIT
       try(Connection connection = connectionFactory.createConnection()){
          connection.start();
          try(Session session = connection.createSession()){
-            Queue destination = session.createQueue(QUEUE_NAME);
+            Queue destination = session.createQueue("testMapMessage");
             MessageProducer messageProducer = session.createProducer(destination);
 
             MapMessage mapMessage = session.createMapMessage();
@@ -122,7 +122,7 @@ public class MessageTypeTest extends BaseKafkaJMSIT
       try(Connection connection = connectionFactory.createConnection()){
          connection.start();
          try(Session session = connection.createSession()){
-            Queue destination = session.createQueue(QUEUE_NAME);
+            Queue destination = session.createQueue("testObjectMessage");
             MessageProducer messageProducer = session.createProducer(destination);
 
             ObjectMessage objectMessage = session.createObjectMessage();
@@ -150,7 +150,7 @@ public class MessageTypeTest extends BaseKafkaJMSIT
       try(Connection connection = connectionFactory.createConnection()){
          connection.start();
          try(Session session = connection.createSession()){
-            Queue destination = session.createQueue(QUEUE_NAME);
+            Queue destination = session.createQueue("testStreamMessage");
             MessageProducer messageProducer = session.createProducer(destination);
 
             StreamMessage streamMessage = session.createStreamMessage();

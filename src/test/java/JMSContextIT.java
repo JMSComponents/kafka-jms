@@ -36,7 +36,7 @@ public class JMSContextIT extends BaseKafkaJMSIT {
         String text = "testString";
         TextMessage result;
         try(JMSContext context = connectionFactory.createContext()){
-            Queue destination = context.createQueue(QUEUE_NAME);
+            Queue destination = context.createQueue("testQueue");
             JMSProducer jmsProducer = context.createProducer();
             jmsProducer.send(destination, text);
 
@@ -53,7 +53,7 @@ public class JMSContextIT extends BaseKafkaJMSIT {
         String text = "testString";
         TextMessage result;
         try(JMSContext context = connectionFactory.createContext()){
-            Topic destination = context.createTopic(TOPIC_NAME);
+            Topic destination = context.createTopic("testTopic");
             JMSProducer jmsProducer = context.createProducer();
             jmsProducer.send(destination, text);
 

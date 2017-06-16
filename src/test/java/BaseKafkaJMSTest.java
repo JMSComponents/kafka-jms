@@ -22,13 +22,14 @@ import io.github.jmscomponents.kafka.amqp.jms.JmsKafkaConnectionFactory;
 import io.github.jmscomponents.kafka.jms.KafkaConnectionFactory;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.ClassRule;
 import org.junit.Rule;
 
 
-public class BaseKafkaJMSIT {
+public class BaseKafkaJMSTest {
 
-    @Rule
-    public KafkaJunitRule kafkaRule = KafkaJunitRule.create().waitForStartup();
+    @ClassRule
+    public static KafkaJunitRule kafkaRule = KafkaJunitRule.create().waitForStartup();
     
     KafkaConnectionFactory connectionFactory;
 
