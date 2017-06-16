@@ -24,9 +24,17 @@ import javax.jms.JMSException;
 import javax.jms.JMSRuntimeException;
 import javax.jms.JMSSecurityException;
 import javax.jms.JMSSecurityRuntimeException;
+import javax.jms.Message;
 
+import io.github.jmscomponents.kafka.jms.consumer.ConsumerFactory;
+import io.github.jmscomponents.kafka.jms.consumer.DefaultConsumerFactory;
 import io.github.jmscomponents.kafka.jms.exception.JmsExceptionSupport;
+import io.github.jmscomponents.kafka.jms.message.DefaultMessageFactory;
+import io.github.jmscomponents.kafka.jms.message.MessageFactory;
+import io.github.jmscomponents.kafka.jms.producer.DefaultProducerFactory;
+import io.github.jmscomponents.kafka.jms.producer.ProducerFactory;
 import io.github.jmscomponents.kafka.jms.security.PlainLogin;
+import org.apache.kafka.common.serialization.Serde;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -34,11 +42,29 @@ public class KafkaConnectionFactory implements ConnectionFactory {
    private static final Logger log = LoggerFactory.getLogger(KafkaConnectionFactory.class);
    private final Properties properties = new Properties();
    private final String bootstrapServers;
+   private final ProducerFactory producerFactory;
+   private final ConsumerFactory consumerFactory;
+   private final MessageFactory messageFactory;
    private String username;
    private String password;
    
    public KafkaConnectionFactory(String bootstrapServers) {
+      this(bootstrapServers, new DefaultProducerFactory(), new DefaultConsumerFactory());
+   }
+
+   public KafkaConnectionFactory(String bootstrapServers, Serde<Message> messageSerde) {
+      this(bootstrapServers, new DefaultProducerFactory(messageSerde.serializer()), new DefaultConsumerFactory(messageSerde.deserializer()));
+   }
+
+   public KafkaConnectionFactory(String bootstrapServers, ProducerFactory producerFactory, ConsumerFactory consumerFactory) {
+      this(bootstrapServers, producerFactory, consumerFactory, new DefaultMessageFactory());
+   }
+   
+   public KafkaConnectionFactory(String bootstrapServers, ProducerFactory producerFactory, ConsumerFactory consumerFactory, MessageFactory messageFactory) {
       this.bootstrapServers = bootstrapServers;
+      this.producerFactory = producerFactory;
+      this.consumerFactory = consumerFactory;
+      this.messageFactory = messageFactory;
    }
 
    
@@ -106,7 +132,7 @@ public class KafkaConnectionFactory implements ConnectionFactory {
       if (username != null && password != null) {
          javax.security.auth.login.Configuration.setConfiguration(PlainLogin.createJaasConfig(username, password));
       }
-      return new KafkaConnection(bootstrapServers, this.properties);
+      return new KafkaConnection(bootstrapServers, this.properties, producerFactory, consumerFactory, messageFactory);
    }
 
    static void validateSessionMode(int mode) {

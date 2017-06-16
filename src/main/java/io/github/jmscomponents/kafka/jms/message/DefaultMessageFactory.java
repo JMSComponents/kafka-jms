@@ -14,16 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.github.jmscomponents.kafka.jms.consumer;
+package io.github.jmscomponents.kafka.jms.message;
 
-import javax.jms.Message;
+import io.github.jmscomponents.kafka.amqp.jms.JmsMessageFactory;
 
-import java.util.Properties;
-
-import org.apache.kafka.clients.consumer.Consumer;
-
-public interface ConsumerFactory {
-    
-    Consumer<String, Message> createConsumer(Properties properties);
-
+/**
+ * Ideally this should be agnostic and we should have our own message objects,
+ * but for ease and to avoid bloat, for now we just extent AmqpMessageFactory.
+ */
+public class DefaultMessageFactory extends JmsMessageFactory {
 }

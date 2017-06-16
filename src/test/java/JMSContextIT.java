@@ -28,7 +28,7 @@ import java.io.IOException;
 
 import org.junit.Test;
 
-public class JMSContextTest extends BaseKafkaJMSTest {
+public class JMSContextIT extends BaseKafkaJMSIT {
 
     @Test
     public void testQueue() throws IOException, InterruptedException, JMSException {
@@ -41,7 +41,7 @@ public class JMSContextTest extends BaseKafkaJMSTest {
             jmsProducer.send(destination, text);
 
             JMSConsumer jmsConsumer = context.createConsumer(destination);
-            result = (TextMessage) jmsConsumer.receive(10000);
+            result = (TextMessage) jmsConsumer.receive(100);
         }
 
         assertEquals(text, result == null ? null : result.getText());
@@ -58,13 +58,13 @@ public class JMSContextTest extends BaseKafkaJMSTest {
             jmsProducer.send(destination, text);
 
             JMSConsumer jmsConsumer = context.createConsumer(destination);
-            result = (TextMessage) jmsConsumer.receive(10000);
+            result = (TextMessage) jmsConsumer.receive(100);
 
             assertNull("topic subscription should only get messages after subscription", result);
 
             jmsProducer.send(destination, text);
 
-            result = (TextMessage) jmsConsumer.receive(10000);
+            result = (TextMessage) jmsConsumer.receive(100);
         }
 
         assertEquals(text, result == null ? null : result.getText());

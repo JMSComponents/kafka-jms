@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.github.jmscomponents.kafka.amqp.serialization;
+package io.github.jmscomponents.kafka.amqp.jms.serialization;
 
 import javax.jms.BytesMessage;
 import javax.jms.JMSException;
@@ -23,10 +23,11 @@ import javax.jms.Message;
 import javax.jms.StreamMessage;
 import java.util.Map;
 
+import io.github.jmscomponents.kafka.amqp.serialization.AmqpMessageDeserializer;
 import org.apache.kafka.common.serialization.Deserializer;
 import org.apache.qpid.jms.provider.amqp.message.AmqpJmsConverter;
 
-public class AmqpJmsMessageDeserializer implements Deserializer<Message> {
+public class JmsMessageDeserializer implements Deserializer<Message> {
 
    private final AmqpMessageDeserializer messageDeserializer = new AmqpMessageDeserializer();
    

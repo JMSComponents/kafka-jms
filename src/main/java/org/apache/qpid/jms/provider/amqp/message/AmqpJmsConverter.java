@@ -28,12 +28,9 @@ import static org.apache.qpid.jms.provider.amqp.message.AmqpMessageSupport.SERIA
 import static org.apache.qpid.jms.provider.amqp.message.AmqpMessageSupport.isContentType;
 
 import javax.jms.JMSException;
-import java.io.IOException;
-import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 
-import io.netty.buffer.ByteBuf;
 import org.apache.qpid.jms.JmsTopic;
 import org.apache.qpid.jms.message.JmsBytesMessage;
 import org.apache.qpid.jms.message.JmsMessage;
@@ -131,7 +128,7 @@ public final class AmqpJmsConverter
         }
 
         if (result != null) {
-            result.initialize(new AmqpConnection(new AmqpProvider(null), new JmsConnectionInfo(new JmsConnectionId("blank")), null));
+            result.initialize(new AmqpConnection(new AmqpProvider(null, null), new JmsConnectionInfo(new JmsConnectionId("blank")), null));
             result.setHeader(message.getHeader());
             result.setDeliveryAnnotations(message.getDeliveryAnnotations());
             result.setMessageAnnotations(message.getMessageAnnotations());

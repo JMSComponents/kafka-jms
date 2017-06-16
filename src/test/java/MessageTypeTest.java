@@ -18,7 +18,6 @@ import static org.junit.Assert.assertEquals;
 
 import javax.jms.BytesMessage;
 import javax.jms.Connection;
-import javax.jms.ConnectionFactory;
 import javax.jms.JMSException;
 import javax.jms.MapMessage;
 import javax.jms.MessageConsumer;
@@ -32,7 +31,7 @@ import java.io.IOException;
 
 import org.junit.Test;
 
-public class MessageTypeTest extends BaseKafkaJMSTest
+public class MessageTypeTest extends BaseKafkaJMSIT
 {
    
    @Test
@@ -52,7 +51,7 @@ public class MessageTypeTest extends BaseKafkaJMSTest
             
             MessageConsumer messageConsumer = session.createConsumer(destination);
             
-            result = (TextMessage)messageConsumer.receive(10000);
+            result = (TextMessage)messageConsumer.receive(1000);
          }
       }
 
@@ -78,7 +77,7 @@ public class MessageTypeTest extends BaseKafkaJMSTest
 
             MessageConsumer messageConsumer = session.createConsumer(destination);
 
-            result = (BytesMessage)messageConsumer.receive(10000);
+            result = (BytesMessage)messageConsumer.receive(1000);
          }
       }
       assertEquals(5, result.readInt());
@@ -107,7 +106,7 @@ public class MessageTypeTest extends BaseKafkaJMSTest
 
             MessageConsumer messageConsumer = session.createConsumer(destination);
 
-            result = (MapMessage)messageConsumer.receive(10000);
+            result = (MapMessage)messageConsumer.receive(1000);
          }
       }
 
@@ -134,7 +133,7 @@ public class MessageTypeTest extends BaseKafkaJMSTest
 
             MessageConsumer messageConsumer = session.createConsumer(destination);
 
-            result = (ObjectMessage)messageConsumer.receive(10000);
+            result = (ObjectMessage)messageConsumer.receive(1000);
          }
       }
 
@@ -162,7 +161,7 @@ public class MessageTypeTest extends BaseKafkaJMSTest
 
             MessageConsumer messageConsumer = session.createConsumer(destination);
 
-            result = (StreamMessage)messageConsumer.receive(10000);
+            result = (StreamMessage)messageConsumer.receive(1000);
          }
       }
 

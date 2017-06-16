@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.github.jmscomponents.kafka.amqp.producer;
+package io.github.jmscomponents.kafka.amqp.jms;
 
 import javax.jms.Message;
 import java.util.Map;
@@ -22,19 +22,19 @@ import java.util.Properties;
 
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.Producer;
-import io.github.jmscomponents.kafka.amqp.serialization.AmqpJmsMessageSerializer;
+import io.github.jmscomponents.kafka.amqp.jms.serialization.JmsMessageSerializer;
 import org.apache.kafka.common.serialization.StringSerializer;
 
-public class AmqpJmsMessageProducer extends KafkaProducer<String, Message> implements Producer<String, Message>
+public class JmsMessageProducer extends KafkaProducer<String, Message> implements Producer<String, Message>
 {
-   public AmqpJmsMessageProducer(Map<String, Object> configs)
+   public JmsMessageProducer(Map<String, Object> configs)
    {
-      super(configs, new StringSerializer(), new AmqpJmsMessageSerializer());
+      super(configs, new StringSerializer(), new JmsMessageSerializer());
    }
 
-   public AmqpJmsMessageProducer(Properties properties)
+   public JmsMessageProducer(Properties properties)
    {
-      super(properties, new StringSerializer(), new AmqpJmsMessageSerializer());
+      super(properties, new StringSerializer(), new JmsMessageSerializer());
    }
    
 

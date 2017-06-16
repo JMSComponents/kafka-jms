@@ -35,6 +35,7 @@ import javax.jms.TemporaryTopic;
 import javax.jms.TextMessage;
 import javax.jms.Topic;
 
+import io.github.jmscomponents.kafka.amqp.jms.JmsMessageFactory;
 import org.apache.qpid.jms.JmsDestination;
 import org.apache.qpid.jms.JmsQueue;
 import org.apache.qpid.jms.JmsTemporaryQueue;
@@ -117,7 +118,7 @@ public final class JmsMessageTransformation {
      */
     public static JmsMessage transformMessage(Message message) throws JMSException {
         JmsMessage jmsMessage = null;
-        KafkaAmqpJmsMessageFactory factory = new KafkaAmqpJmsMessageFactory();
+        JmsMessageFactory factory = new JmsMessageFactory();
 
         if (message instanceof BytesMessage) {
             BytesMessage bytesMsg = (BytesMessage) message;

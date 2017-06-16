@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.github.jmscomponents.kafka.amqp.consumer;
+package io.github.jmscomponents.kafka.amqp.jms;
 
 import javax.jms.Message;
 import java.util.Map;
@@ -22,19 +22,19 @@ import java.util.Properties;
 
 import org.apache.kafka.clients.consumer.Consumer;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
-import io.github.jmscomponents.kafka.amqp.serialization.AmqpJmsMessageDeserializer;
+import io.github.jmscomponents.kafka.amqp.jms.serialization.JmsMessageDeserializer;
 import org.apache.kafka.common.serialization.StringDeserializer;
 
-public class AmqpJmsMessageConsumer extends KafkaConsumer<String, Message> implements Consumer<String, Message>
+public class JmsMessageConsumer extends KafkaConsumer<String, Message> implements Consumer<String, Message>
 {
    
-   public AmqpJmsMessageConsumer(Map<String, Object> configs)
+   public JmsMessageConsumer(Map<String, Object> configs)
    {
-      super(configs, new StringDeserializer(), new AmqpJmsMessageDeserializer());
+      super(configs, new StringDeserializer(), new JmsMessageDeserializer());
    }
 
-   public AmqpJmsMessageConsumer(Properties properties)
+   public JmsMessageConsumer(Properties properties)
    {
-      super(properties, new StringDeserializer(), new AmqpJmsMessageDeserializer());
+      super(properties, new StringDeserializer(), new JmsMessageDeserializer());
    }
 }

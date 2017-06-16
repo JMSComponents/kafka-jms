@@ -31,8 +31,11 @@ import javax.jms.Session;
 import javax.jms.Topic;
 
 import io.github.jmscomponents.kafka.jms.common.ConnectionAwareSession;
+import io.github.jmscomponents.kafka.jms.consumer.ConsumerFactory;
 import io.github.jmscomponents.kafka.jms.exception.UnsupportedOperationException;
 
+import io.github.jmscomponents.kafka.jms.message.MessageFactory;
+import io.github.jmscomponents.kafka.jms.producer.ProducerFactory;
 import io.github.jmscomponents.kafka.jms.util.Unsupported;
 import org.apache.kafka.clients.CommonClientConfigs;
 import org.slf4j.Logger;
@@ -41,13 +44,19 @@ import org.slf4j.LoggerFactory;
 public class KafkaConnection extends KafkaConnectionForContextImpl implements Connection {
    private static final Logger log = LoggerFactory.getLogger(KafkaConnection.class);
    private final Properties config;
+   private final ProducerFactory producerFactory;
+   private final ConsumerFactory consumerFactory;
+   private final MessageFactory messageFactory;
    private ExceptionListener exceptionListener;
    private List<ConnectionAwareSession> sessions = new ArrayList<>();
    private AtomicBoolean isStarted = new AtomicBoolean(false);
    
-   KafkaConnection(String bootstrapServers, Properties config) {
+   KafkaConnection(String bootstrapServers, Properties config, ProducerFactory producerFactory, ConsumerFactory consumerFactory, MessageFactory messageFactory) {
       this.config = new Properties(config);
       this.config.setProperty(CommonClientConfigs.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
+      this.producerFactory = producerFactory;
+      this.consumerFactory = consumerFactory;
+      this.messageFactory = messageFactory;
    }
 
    Properties getConfig() {
@@ -55,7 +64,7 @@ public class KafkaConnection extends KafkaConnectionForContextImpl implements Co
    }
 
    public Session createSession(boolean transacted, int acknowledgeMode) throws JMSException {
-      ConnectionAwareSession kafkaSession = new KafkaSession(this, transacted, acknowledgeMode);
+      ConnectionAwareSession kafkaSession = new KafkaSession(this, transacted, acknowledgeMode, producerFactory, consumerFactory, messageFactory);
       sessions.add(kafkaSession);
       return kafkaSession;
    }

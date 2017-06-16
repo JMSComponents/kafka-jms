@@ -14,20 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.github.jmscomponents.kafka.amqp.producer;
+package io.github.jmscomponents.kafka.jms.producer;
 
-import java.util.Map;
+import javax.jms.JMSException;
+import javax.jms.Message;
 
-import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.Producer;
-import io.github.jmscomponents.kafka.amqp.serialization.AmqpMessageSerializer;
-import org.apache.kafka.common.serialization.StringSerializer;
-import org.apache.qpid.proton.message.Message;
 
-public class AmqpMessageProducer extends KafkaProducer<String, Message> implements Producer<String, Message>
-{
-   public AmqpMessageProducer(Map<String, Object> configs) {
-      super(configs, new StringSerializer(), new AmqpMessageSerializer());
-   }
-   
+public interface MessageProducerFactory {
+   Producer<String, Message> createProducer() throws JMSException;
 }

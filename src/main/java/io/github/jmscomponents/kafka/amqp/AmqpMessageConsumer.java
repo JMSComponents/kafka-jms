@@ -14,16 +14,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.github.jmscomponents.kafka.jms.consumer;
+package io.github.jmscomponents.kafka.amqp;
 
-import javax.jms.Message;
-
-import java.util.Properties;
+import java.util.Map;
 
 import org.apache.kafka.clients.consumer.Consumer;
+import org.apache.kafka.clients.consumer.KafkaConsumer;
+import io.github.jmscomponents.kafka.amqp.serialization.AmqpMessageDeserializer;
+import org.apache.kafka.common.serialization.StringDeserializer;
+import org.apache.qpid.proton.message.Message;
 
-public interface ConsumerFactory {
-    
-    Consumer<String, Message> createConsumer(Properties properties);
-
+public class AmqpMessageConsumer extends KafkaConsumer<String, Message> implements Consumer<String, Message>
+{
+   public AmqpMessageConsumer(Map<String, Object> configs)
+   {
+      super(configs, new StringDeserializer(), new AmqpMessageDeserializer());
+   }
+   
 }

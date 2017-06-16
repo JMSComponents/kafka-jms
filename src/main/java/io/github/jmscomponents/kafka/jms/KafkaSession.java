@@ -38,12 +38,14 @@ import javax.jms.TopicSubscriber;
 
 import io.github.jmscomponents.kafka.jms.common.ConnectionAwareSession;
 import io.github.jmscomponents.kafka.jms.consumer.ConsumerFactory;
-import io.github.jmscomponents.kafka.jms.consumer.ConsumerFactoryImpl;
+import io.github.jmscomponents.kafka.jms.consumer.MessageConsumerFactory;
+import io.github.jmscomponents.kafka.jms.consumer.MessageConsumerFactoryImpl;
+import io.github.jmscomponents.kafka.jms.message.MessageFactory;
+import io.github.jmscomponents.kafka.jms.producer.MessageProducerFactory;
+import io.github.jmscomponents.kafka.jms.producer.MessageProducerFactoryImpl;
 import io.github.jmscomponents.kafka.jms.producer.ProducerFactory;
-import io.github.jmscomponents.kafka.jms.producer.ProducerFactoryImpl;
 import io.github.jmscomponents.kafka.jms.util.Preconditions;
 import io.github.jmscomponents.kafka.jms.util.Unsupported;
-import org.apache.qpid.jms.provider.amqp.message.KafkaAmqpJmsMessageFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -53,15 +55,15 @@ public class KafkaSession implements ConnectionAwareSession
    private final boolean transacted;
    private final int acknowledgeMode;
    private final KafkaConnection connection;
-   private MessageFactory jmsMessageFactory = new KafkaAmqpJmsMessageFactory();
-   private ConsumerFactory consumerFactory;
-   private ProducerFactory producerFactory;
+   private final MessageFactory messageFactory;
+   private MessageConsumerFactory consumerFactory;
+   private MessageProducerFactory producerFactory;
    private List<KafkaMessageConsumer> consumers = new ArrayList<>();
    private List<KafkaMessageProducer> producers = new ArrayList<>();
    private volatile boolean closed = false;
    
    
-   public KafkaSession(KafkaConnection connection, boolean transacted, int acknowledgeMode) throws JMSException {
+   public KafkaSession(KafkaConnection connection, boolean transacted, int acknowledgeMode, ProducerFactory producerFactory, ConsumerFactory consumerFactory, MessageFactory messageFactory) throws JMSException {
       Preconditions.checkTransacted(transacted);
       Preconditions.checkAcknowledgeMode(acknowledgeMode);
       
@@ -69,40 +71,41 @@ public class KafkaSession implements ConnectionAwareSession
       this.acknowledgeMode = acknowledgeMode;
       
       this.connection = connection;
-      this.consumerFactory = new ConsumerFactoryImpl(this);
-      this.producerFactory = new ProducerFactoryImpl(this);
+      this.consumerFactory = new MessageConsumerFactoryImpl(consumerFactory, this);
+      this.producerFactory = new MessageProducerFactoryImpl(producerFactory, this);
+      this.messageFactory = messageFactory;
    }
 
    public BytesMessage createBytesMessage() throws JMSException {
-      return jmsMessageFactory.createBytesMessage();
+      return messageFactory.createBytesMessage();
    }
 
    public MapMessage createMapMessage() throws JMSException {
-      return jmsMessageFactory.createMapMessage();
+      return messageFactory.createMapMessage();
    }
 
    public Message createMessage() throws JMSException {
-      return jmsMessageFactory.createMessage();
+      return messageFactory.createMessage();
    }
 
    public ObjectMessage createObjectMessage() throws JMSException {
-      return jmsMessageFactory.createObjectMessage();
+      return messageFactory.createObjectMessage();
    }
 
    public ObjectMessage createObjectMessage(Serializable serializable) throws JMSException {
-      return jmsMessageFactory.createObjectMessage(serializable);
+      return messageFactory.createObjectMessage(serializable);
    }
 
    public StreamMessage createStreamMessage() throws JMSException {
-      return jmsMessageFactory.createStreamMessage();
+      return messageFactory.createStreamMessage();
    }
 
    public TextMessage createTextMessage() throws JMSException {
-      return jmsMessageFactory.createTextMessage();
+      return messageFactory.createTextMessage();
    }
 
    public TextMessage createTextMessage(String payload) throws JMSException {
-      return jmsMessageFactory.createTextMessage(payload);
+      return messageFactory.createTextMessage(payload);
    }
 
    public boolean getTransacted() throws JMSException {
@@ -280,11 +283,11 @@ public class KafkaSession implements ConnectionAwareSession
       return connection.getConfig();
    }
    
-   ConsumerFactory getConsumerFactory() {
+   MessageConsumerFactory getConsumerFactory() {
       return consumerFactory;
    }
 
-   ProducerFactory getProducerFactory() {
+   MessageProducerFactory getProducerFactory() {
       return producerFactory;
    }
 

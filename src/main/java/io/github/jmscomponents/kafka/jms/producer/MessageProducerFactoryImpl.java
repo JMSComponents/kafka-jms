@@ -22,16 +22,17 @@ import javax.jms.Message;
 import java.util.Properties;
 
 import io.github.jmscomponents.kafka.jms.common.ConnectionAwareSession;
-import io.github.jmscomponents.kafka.amqp.producer.AmqpJmsMessageProducer;
 import org.apache.kafka.clients.producer.Producer;
 import org.apache.kafka.clients.producer.ProducerConfig;
 
-public class ProducerFactoryImpl implements ProducerFactory {
+public class MessageProducerFactoryImpl implements MessageProducerFactory {
    
    private final ConnectionAwareSession session;
+   private final ProducerFactory producerFactory;
 
-   public ProducerFactoryImpl(ConnectionAwareSession session) {
+   public MessageProducerFactoryImpl(ProducerFactory producerFactory, ConnectionAwareSession session) {
       this.session = session;
+      this.producerFactory = producerFactory;
    }
 
    public Producer<String, Message> createProducer() throws JMSException
@@ -48,6 +49,6 @@ public class ProducerFactoryImpl implements ProducerFactory {
          if(ProducerConfig.configNames().contains(k)) properties.put(k, v);
       });
       
-      return new AmqpJmsMessageProducer(properties);
+      return producerFactory.createProducer(properties);
    }
 }

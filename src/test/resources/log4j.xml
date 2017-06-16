@@ -18,8 +18,12 @@
         <level value="INFO" />
     </logger>
 
-    <root>
+    <logger name="io.github.jmscomponents">
         <level value="INFO" />
+    </logger>
+
+    <root>
+        <level value="ERROR" />
         <appender-ref ref="console" />
     </root>
 

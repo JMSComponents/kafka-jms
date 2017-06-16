@@ -14,21 +14,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.github.jmscomponents.kafka.amqp.consumer;
+package io.github.jmscomponents.kafka.amqp;
 
 import java.util.Map;
 
-import org.apache.kafka.clients.consumer.Consumer;
-import org.apache.kafka.clients.consumer.KafkaConsumer;
-import io.github.jmscomponents.kafka.amqp.serialization.AmqpMessageDeserializer;
-import org.apache.kafka.common.serialization.StringDeserializer;
+import org.apache.kafka.clients.producer.KafkaProducer;
+import org.apache.kafka.clients.producer.Producer;
+import io.github.jmscomponents.kafka.amqp.serialization.AmqpMessageSerializer;
+import org.apache.kafka.common.serialization.StringSerializer;
 import org.apache.qpid.proton.message.Message;
 
-public class AmqpMessageConsumer extends KafkaConsumer<String, Message> implements Consumer<String, Message>
+public class AmqpMessageProducer extends KafkaProducer<String, Message> implements Producer<String, Message>
 {
-   public AmqpMessageConsumer(Map<String, Object> configs)
-   {
-      super(configs, new StringDeserializer(), new AmqpMessageDeserializer());
+   public AmqpMessageProducer(Map<String, Object> configs) {
+      super(configs, new StringSerializer(), new AmqpMessageSerializer());
    }
    
 }

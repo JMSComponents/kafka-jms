@@ -14,16 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.qpid.jms.provider.amqp.message;
-
-import static org.apache.qpid.jms.provider.amqp.message.AmqpMessageSupport.JMS_MSG_TYPE;
+package io.github.jmscomponents.kafka.amqp.jms;
 
 import java.io.IOException;
 import java.io.Serializable;
 
 import javax.jms.JMSException;
 
-import io.github.jmscomponents.kafka.jms.MessageFactory;
+import io.github.jmscomponents.kafka.jms.message.MessageFactory;
 import org.apache.qpid.jms.exceptions.JmsExceptionSupport;
 import org.apache.qpid.jms.message.JmsBytesMessage;
 import org.apache.qpid.jms.message.JmsMapMessage;
@@ -31,10 +29,14 @@ import org.apache.qpid.jms.message.JmsMessage;
 import org.apache.qpid.jms.message.JmsObjectMessage;
 import org.apache.qpid.jms.message.JmsStreamMessage;
 import org.apache.qpid.jms.message.JmsTextMessage;
-import org.apache.qpid.jms.meta.JmsConnectionId;
-import org.apache.qpid.jms.meta.JmsConnectionInfo;
-import org.apache.qpid.jms.provider.amqp.AmqpConnection;
-import org.apache.qpid.jms.provider.amqp.AmqpProvider;
+import org.apache.qpid.jms.provider.amqp.message.AmqpJmsBytesMessageFacade;
+import org.apache.qpid.jms.provider.amqp.message.AmqpJmsMapMessageFacade;
+import org.apache.qpid.jms.provider.amqp.message.AmqpJmsMessageFacade;
+import org.apache.qpid.jms.provider.amqp.message.AmqpJmsObjectMessageFacade;
+import org.apache.qpid.jms.provider.amqp.message.AmqpJmsStreamMessageFacade;
+import org.apache.qpid.jms.provider.amqp.message.AmqpJmsTextMessageFacade;
+
+import static org.apache.qpid.jms.provider.amqp.message.AmqpJmsMessageFacadeUtil.initialize;
 
 /**
  * AMQP Message Factory instance used to create new JmsMessage types that wrap an
@@ -42,7 +44,7 @@ import org.apache.qpid.jms.provider.amqp.AmqpProvider;
  * Message instances, the messages returned here should be created in a proper
  * initially empty state for the client to populate.
  */
-public class KafkaAmqpJmsMessageFactory implements MessageFactory {
+public class JmsMessageFactory implements MessageFactory {
 
     @Override
     public JmsMessage createMessage() throws JMSException {
@@ -108,11 +110,6 @@ public class KafkaAmqpJmsMessageFactory implements MessageFactory {
         return facade.asJmsMessage();
     }
     
-    private void initialize(AmqpJmsMessageFacade amqpJmsMessageFacade){
-        amqpJmsMessageFacade.setMessageAnnotation(JMS_MSG_TYPE, amqpJmsMessageFacade.getJmsMsgType());
-        amqpJmsMessageFacade.setPersistent(true);
-        amqpJmsMessageFacade.initializeEmptyBody();
-        amqpJmsMessageFacade.initialize(new AmqpConnection(new AmqpProvider(null), new JmsConnectionInfo(new JmsConnectionId("blank")), null));
-    }
+
 
 }

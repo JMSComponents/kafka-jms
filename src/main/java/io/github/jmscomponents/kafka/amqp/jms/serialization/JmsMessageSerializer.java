@@ -14,17 +14,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.github.jmscomponents.kafka.amqp.serialization;
+package io.github.jmscomponents.kafka.amqp.jms.serialization;
 
 import javax.jms.JMSException;
 import javax.jms.JMSRuntimeException;
 import javax.jms.Message;
 import java.util.Map;
 
+import io.github.jmscomponents.kafka.amqp.serialization.AmqpMessageSerializer;
 import org.apache.kafka.common.serialization.Serializer;
 import org.apache.qpid.jms.provider.amqp.message.AmqpJmsConverter;
 
-public class AmqpJmsMessageSerializer implements Serializer<Message>
+public class JmsMessageSerializer implements Serializer<Message>
 {
 
       private final AmqpMessageSerializer messageSerializer = new AmqpMessageSerializer();

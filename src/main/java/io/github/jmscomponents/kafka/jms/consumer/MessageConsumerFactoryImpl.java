@@ -22,18 +22,19 @@ import javax.jms.Message;
 import java.util.Properties;
 
 import io.github.jmscomponents.kafka.jms.common.ConnectionAwareSession;
-import io.github.jmscomponents.kafka.amqp.consumer.AmqpJmsMessageConsumer;
 import org.apache.kafka.clients.CommonClientConfigs;
 import org.apache.kafka.clients.consumer.Consumer;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 
-public class ConsumerFactoryImpl implements ConsumerFactory<String, Message>
+public class MessageConsumerFactoryImpl implements MessageConsumerFactory
 {
    private final ConnectionAwareSession session;
+   private final ConsumerFactory consumerFactory;
    private static final String QUEUE_GROUP_ID = "queue";
 
-   public ConsumerFactoryImpl(ConnectionAwareSession session) {
+   public MessageConsumerFactoryImpl(ConsumerFactory consumerFactory, ConnectionAwareSession session) {
       this.session = session;
+      this.consumerFactory = consumerFactory;
    }
 
    public Consumer<String, Message> createDurableSubscriber(String name) throws JMSException {
@@ -71,6 +72,6 @@ public class ConsumerFactoryImpl implements ConsumerFactory<String, Message>
       properties.setProperty(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, Boolean.FALSE.toString());
       properties.setProperty(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, queue ? "earliest" : "latest");
 
-      return new AmqpJmsMessageConsumer(properties);
+      return consumerFactory.createConsumer(properties);
    }
 }

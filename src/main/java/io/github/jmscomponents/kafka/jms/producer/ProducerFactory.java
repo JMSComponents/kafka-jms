@@ -16,11 +16,14 @@
  */
 package io.github.jmscomponents.kafka.jms.producer;
 
-import javax.jms.JMSException;
 import javax.jms.Message;
+
+import java.util.Properties;
 
 import org.apache.kafka.clients.producer.Producer;
 
 public interface ProducerFactory {
-   Producer<String, Message> createProducer() throws JMSException;
+
+    Producer<String, Message> createProducer(Properties properties);
+    
 }
