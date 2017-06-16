@@ -23,10 +23,10 @@ public class BaseKafkaJMSTest {
     @Before
     public void before() throws IOException, InterruptedException, JMSException {
         Properties properties = new Properties();
-        properties.setProperty("zookeeper.session.timeout.ms", "20000");
-        properties.setProperty("zookeeper.sync.time.ms", "10000");
-        properties.setProperty("fetch.max.wait.ms", "5000");
-        properties.setProperty("session.timeout.ms", "100000");
+        properties.setProperty("zookeeper.session.timeout.ms", "10000");
+        properties.setProperty("zookeeper.sync.time.ms", "5000");
+        properties.setProperty("fetch.max.wait.ms", "1000");
+        properties.setProperty("session.timeout.ms", "50000");
         embeddedKafkaCluster = new EmbeddedKafkaCluster(1, properties);
         embeddedKafkaCluster.start();
         embeddedKafkaCluster.createTopic(TOPIC_NAME);

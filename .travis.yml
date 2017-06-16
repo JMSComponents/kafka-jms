@@ -7,7 +7,7 @@ cache:
   directories:
   - "$HOME/.cache"
 after_success:
-  - mvn deploy -DskipTests=true -B -Pbintray
+  - mvn deploy --settings travis-settings.xml -DskipTests=true -B
 notifications:
   email:
     recipients:
